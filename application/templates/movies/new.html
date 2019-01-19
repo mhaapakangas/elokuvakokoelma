@@ -2,18 +2,18 @@
 
 {% block body %}
 <form method="POST" action="{{ url_for('movies_create') }}">
-  <label for="name">Nimi</label>
+  <label for="name">Name</label>
   <input type="text" name="name" id="name"/>
   <br/>
-  <label for="year">Vuosi</label>
+  <label for="year">Year</label>
   <input type="number" name="year" id="year"/>
   <br/>
-  <label for="runtime">Kesto</label>
+  <label for="runtime">Runtime</label>
   <input type="number" name="runtime" id="runtime"/>
   <br/>
   <label for="genre">Genre</label>
   <input type="text" name="genre" id="genre"/>
   <br/>
-  <input type="submit" value="Lisää uusi elokuva!"/>
+  <input type="submit" value="Add a new movie"/>
 </form>
 {% endblock %}
