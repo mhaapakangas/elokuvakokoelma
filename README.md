@@ -15,3 +15,5 @@ Toimintoja:
 - Omien arvostelujen muokkaus ja elokuvien poisto omasta kokoelmasta ja toivelistalta
 
 Linkki sovellukseen: https://powerful-lowlands-11008.herokuapp.com/
+
+[Käyttäjätarinat](documentation/user_stories.md)
