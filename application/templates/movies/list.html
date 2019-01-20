@@ -14,6 +14,11 @@
       <td>{{ movie.year }}</td>
       <td>{{ movie.runtime }}</td>
       <td>{{ movie.genre }}</td>
+      <td>
+        <form method="GET" action="{{ url_for('movies_update_form', movie_id=movie.id) }}">
+          <input type="submit" value="Update"/>
+        </form>
+      </td>
     </tr>
     {% endfor %}
   </table>

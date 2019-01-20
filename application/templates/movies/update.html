@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<form method="POST" action="{{ url_for('movies_update', movie_id=movie.id) }}">
+  <label for="name">Name</label>
+  <input type="text" name="name" id="name" value="{{ movie.name }}"/>
+  <br/>
+  <label for="year">Year</label>
+  <input type="number" name="year" id="year" value="{{ movie.year }}"/>
+  <br/>
+  <label for="runtime">Runtime</label>
+  <input type="number" name="runtime" id="runtime" value="{{ movie.runtime }}"/>
+  <br/>
+  <label for="genre">Genre</label>
+  <input type="text" name="genre" id="genre" value="{{ movie.genre }}"/>
+  <br/>
+  <input type="submit" value="Update movie"/>
+</form>
+{% endblock %}
