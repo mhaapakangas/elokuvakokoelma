@@ -15,5 +15,9 @@ Toimintoja:
 - Omien arvostelujen muokkaus ja elokuvien poisto omasta kokoelmasta ja toivelistalta
  
 [Sovellus herokussa](https://powerful-lowlands-11008.herokuapp.com/)  
+Testikäyttäjä: 
+- käyttäjä: user
+- salasana: password
+
 [Käyttäjätarinat](documentation/user_stories.md)  
 [Tietokantakaavio](documentation/database_diagram.png)  
