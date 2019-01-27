@@ -19,6 +19,17 @@
           <input type="submit" value="Update"/>
         </form>
       </td>
+      <td>
+        <form method="POST" action="{{ url_for('add_rating', movie_id=movie.id) }}">
+          <input type="number" name="rating"/>
+          <input type="submit" value="Add rating"/>
+        </form>
+      </td>
+       <td>
+        <form method="POST" action="{{ url_for('add_movie_to_wishlist', movie_id=movie.id) }}">
+          <input type="submit" value="Add to wish list"/>
+        </form>
+      </td>
     </tr>
     {% endfor %}
   </table>

@@ -21,6 +21,9 @@ from application.movies import views
 from application.auth import models
 from application.auth import views
 
+from application.ratings import models
+from application.ratings import views
+
 from application.auth.models import User
 from os import urandom
 app.config["SECRET_KEY"] = urandom(32)
