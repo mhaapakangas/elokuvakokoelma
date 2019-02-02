@@ -8,7 +8,7 @@ from sqlalchemy.sql import text
 
 @app.route("/movies", methods=["GET"])
 def movies_index():
-    return render_template("movies/list.html", movies=Movie.query.all())
+    return render_template("movies/list.html", movies=Movie.query.all(), filter="")
 
 
 @app.route("/movies/new/")
@@ -89,3 +89,22 @@ def movies_cast(movie_id):
     db.session().commit()
 
     return redirect(url_for("movies_index"))
+
+
+@app.route("/movies/filter/", methods=["POST"])
+def movies_filter():
+    actorfilter = request.form.get("filter")
+
+    stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre, movie.runtime FROM movie"
+                " JOIN cast ON movie_id=movie.id"
+                " JOIN actor ON actor_id=actor.id"
+                " WHERE actor.name LIKE :actorfilter"
+                ).params(actorfilter='%' + actorfilter + '%')
+    res = db.engine.execute(stmt)
+    cast = []
+    for movie in res:
+        m = Movie(movie[1], movie[2], movie[3], movie[4])
+        m.id = movie[0]
+        cast.append(m)
+
+    return render_template("movies/list.html", movies=cast, filter=actorfilter)
