@@ -9,7 +9,7 @@ class User(Base):
     username = db.Column(db.String(144), nullable=False)
     password = db.Column(db.String(144), nullable=False)
 
-    movies = db.relationship('Rating', backref='account', lazy=True)
+    ratings = db.relationship('Rating', backref='user', lazy=True)
 
     def __init__(self, name, username, password):
         self.name = name

@@ -1,5 +1,4 @@
 from application import app, db
-from application.auth.models import User
 from application.movies.models import Movie
 from application.ratings.models import Rating
 from application.ratings.forms import RatingForm
@@ -28,11 +27,6 @@ def add_rating(movie_id):
         rating = Rating()
         rating.movie_id = movie_id
         rating.user_id = current_user.id
-        movie = Movie.query.get(movie_id)
-        movie.users.append(rating)
-        user = User.query.get(current_user.id)
-        user.movies.append(rating)
-
         db.session().add(rating)
 
     rating.rating = form.rating.data

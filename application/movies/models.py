@@ -15,7 +15,7 @@ class Movie(Base):
     genre = db.Column(db.String(144), nullable=False)
     runtime = db.Column(db.Integer, nullable=False)
 
-    users = db.relationship('Rating', backref='movie', lazy=True)
+    ratings = db.relationship('Rating', backref='movie', lazy=True)
     actors = db.relationship('Actor', secondary=Cast, backref='movies', lazy=True)
 
     def __init__(self, name, year, genre, runtime):
