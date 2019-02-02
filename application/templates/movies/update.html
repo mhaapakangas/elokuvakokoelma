@@ -1,8 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<form method="POST" action="{{ url_for('movies_update') }}">
-  {{ form.id }}
+<form method="POST" action="{{ url_for('movies_update', movie_id=movie_id) }}">
   <table>
     <tr>
       <td>
