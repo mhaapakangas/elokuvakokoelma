@@ -37,6 +37,15 @@ def movies_create():
     return redirect(url_for("movies_index"))
 
 
+@app.route("/movies/delete/<movie_id>/", methods=["POST"])
+def movies_delete(movie_id):
+    movie = Movie.query.get(movie_id)
+    db.session().delete(movie)
+    db.session().commit()
+
+    return redirect(url_for("movies_index"))
+
+
 @app.route("/movies/update/<movie_id>/", methods=["POST"])
 def movies_update(movie_id):
     form = MovieForm(request.form)

@@ -19,6 +19,11 @@
           <input type="submit" value="Update"/>
         </form>
       </td>
+       <td>
+        <form method="POST" action="{{ url_for('movies_delete', movie_id=movie.id) }}">
+          <input type="submit" value="Delete"/>
+        </form>
+      </td>
       <td>
         <form method="GET" action="{{ url_for('ratings_form', movie_id=movie.id) }}">
           <input type="submit" value="Add to my collection"/>
