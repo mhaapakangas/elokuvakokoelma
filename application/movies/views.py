@@ -1,6 +1,6 @@
 from application import app, db
 from flask import render_template, request, redirect, url_for
-from application.movies.models import Movie, Cast
+from application.movies.models import Movie
 from application.movies.forms import MovieForm
 from application.actors.models import Actor
 from sqlalchemy.sql import text
@@ -23,7 +23,7 @@ def movies_update_form(movie_id):
 
 @app.route("/movies/cast/<movie_id>/")
 def movies_cast_form(movie_id):
-    stmt = text("SELECT actor_id FROM cast"
+    stmt = text("SELECT actor_id FROM movie_cast"
                 " WHERE movie_id = :movie_id").params(movie_id=movie_id)
     res = db.engine.execute(stmt)
     cast = [actor[0] for actor in res]
@@ -96,7 +96,7 @@ def movies_filter():
     actorfilter = request.form.get("filter")
 
     stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre, movie.runtime FROM movie"
-                " JOIN cast ON movie_id=movie.id"
+                " JOIN movie_cast ON movie_id=movie.id"
                 " JOIN actor ON actor_id=actor.id"
                 " WHERE actor.name LIKE :actorfilter"
                 ).params(actorfilter='%' + actorfilter + '%')

@@ -2,7 +2,7 @@ from application import db
 from application.models import Base
 
 
-Cast = db.Table('cast',
+Cast = db.Table('movie_cast',
                 db.Column('actor_id', db.Integer, db.ForeignKey('actor.id'), primary_key=True),
                 db.Column('movie_id', db.Integer, db.ForeignKey('movie.id'), primary_key=True))
 
