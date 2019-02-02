@@ -1,8 +1,9 @@
 from application import app, db
 from flask import render_template, request, redirect, url_for
-from application.movies.models import Movie, Cast
+from application.movies.models import Movie
 from application.movies.forms import MovieForm
 from application.actors.models import Actor
+from application.cast.models import Cast
 from sqlalchemy.sql import text
 
 
@@ -79,12 +80,11 @@ def movies_update(movie_id):
 @app.route("/movies/cast/<movie_id>/", methods=["POST"])
 def movies_cast(movie_id):
     form = request.form
-
-    movie = Movie.query.get(movie_id)
-    movie.actors.clear()
+    Cast.query.filter_by(movie_id=movie_id).delete()
 
     for actor_id in form:
-        movie.actors.append(Actor.query.get(actor_id))
+        cast = Cast(movie_id, actor_id)
+        db.session().add(cast)
 
     db.session().commit()
 
