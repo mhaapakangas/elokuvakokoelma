@@ -1,7 +1,5 @@
 from application import db
 from application.models import Base
-from application.movies.models import Movie
-from application.auth.models import User
 
 
 class Rating(Base):
@@ -11,6 +9,3 @@ class Rating(Base):
     user_id = db.Column(db.Integer, db.ForeignKey('account.id'))
     want_to_watch = db.Column(db.Boolean)
     rating = db.Column(db.Integer)
-
-    movie = db.relationship(Movie, backref='ratings', lazy=True)
-    user = db.relationship(User, backref='ratings', lazy=True)
