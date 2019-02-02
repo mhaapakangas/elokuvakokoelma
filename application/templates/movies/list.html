@@ -25,6 +25,11 @@
         </form>
       </td>
       <td>
+        <form method="GET" action="{{ url_for('movies_cast_form', movie_id=movie.id) }}">
+          <input type="submit" value="Update cast"/>
+        </form>
+      </td>
+      <td>
         <form method="GET" action="{{ url_for('ratings_form', movie_id=movie.id) }}">
           <input type="submit" value="Add to my collection"/>
         </form>

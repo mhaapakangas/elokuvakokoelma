@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<form method="POST" action="{{ url_for('movies_cast', movie_id=movie_id) }}">
+  <table>
+    {% for actor in actors %}
+    <tr>
+      <td>
+         <input type="checkbox" name="{{ actor.id }}" {% if actor.id in cast %} checked {% endif %}/>
+      </td>
+      <td>
+        {{ actor.name }}
+      </td>
+    </tr>
+    {% endfor %}
+    <tr>
+      <td colspan="3">
+        <input type="submit" value="Update cast"/>
+      </td>
+    </tr>
+  </table>
+</form>
+{% endblock %}

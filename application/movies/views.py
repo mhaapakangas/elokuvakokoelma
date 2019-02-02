@@ -1,7 +1,9 @@
 from application import app, db
 from flask import render_template, request, redirect, url_for
-from application.movies.models import Movie
+from application.movies.models import Movie, Cast
 from application.movies.forms import MovieForm
+from application.actors.models import Actor
+from sqlalchemy.sql import text
 
 
 @app.route("/movies", methods=["GET"])
@@ -17,6 +19,16 @@ def movies_add_form():
 @app.route("/movies/update/<movie_id>/")
 def movies_update_form(movie_id):
     return render_template("movies/update.html", form=MovieForm(obj=Movie.query.get(movie_id)), movie_id=movie_id)
+
+
+@app.route("/movies/cast/<movie_id>/")
+def movies_cast_form(movie_id):
+    stmt = text("SELECT actor_id FROM cast"
+                " WHERE movie_id = :movie_id").params(movie_id=movie_id)
+    res = db.engine.execute(stmt)
+    cast = [actor[0] for actor in res]
+    return render_template("movies/cast.html", actors=Actor.query.all(), movie_id=movie_id,
+                           cast=cast)
 
 
 @app.route("/movies/", methods=["POST"])
@@ -58,6 +70,21 @@ def movies_update(movie_id):
     movie.year = form.year.data
     movie.runtime = form.runtime.data
     movie.genre = form.genre.data
+
+    db.session().commit()
+
+    return redirect(url_for("movies_index"))
+
+
+@app.route("/movies/cast/<movie_id>/", methods=["POST"])
+def movies_cast(movie_id):
+    form = request.form
+
+    movie = Movie.query.get(movie_id)
+    movie.actors.clear()
+
+    for actor_id in form:
+        movie.actors.append(Actor.query.get(actor_id))
 
     db.session().commit()
 
