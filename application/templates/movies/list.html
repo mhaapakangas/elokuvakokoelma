@@ -11,7 +11,7 @@
       <td>Current filter: {{ filter }}</td>
       <td>
         <form method="GET" action="{{ url_for('movies_index') }}">
-          <input type="submit" value="Remove filter"/>
+          <input type="submit" class="btn btn-primary btn-sm" value="Remove filter"/>
         </form>
       </td>
     </tr>
@@ -32,22 +32,22 @@
       <td>{{ movie.genre }}</td>
       <td>
         <form method="GET" action="{{ url_for('movies_cast_form', movie_id=movie.id) }}">
-          <input type="submit" class="btn btn-secondary" value="Update cast"/>
+          <input type="submit" class="btn btn-secondary btn-sm" value="Update cast"/>
         </form>
       </td>
       <td>
         <form method="GET" action="{{ url_for('ratings_form', movie_id=movie.id) }}">
-          <input type="submit" class="btn btn-secondary" value="Add to my collection"/>
+          <input type="submit" class="btn btn-secondary btn-sm" value="Add to my collection"/>
         </form>
       </td>
       <td>
         <form method="GET" action="{{ url_for('movies_update_form', movie_id=movie.id) }}">
-          <input type="submit" class="btn btn-secondary" value="Update"/>
+          <input type="submit" class="btn btn-secondary btn-sm" value="Update"/>
         </form>
       </td>
        <td>
         <form method="POST" action="{{ url_for('movies_delete', movie_id=movie.id) }}">
-          <input type="submit" class="btn btn-danger" value="Delete"/>
+          <input type="submit" class="btn btn-danger btn-sm" value="Delete"/>
         </form>
       </td>
     </tr>
