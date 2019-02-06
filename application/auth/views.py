@@ -6,7 +6,7 @@ from application.auth.models import User
 from application.auth.forms import LoginForm, RegistrationForm
 
 
-@app.route("/auth/login", methods=["GET", "POST"])
+@app.route("/auth/login/", methods=["GET", "POST"])
 def auth_login():
     if request.method == "GET":
         return render_template("auth/login_form.html", form=LoginForm())
@@ -22,7 +22,7 @@ def auth_login():
     return redirect(url_for("index"))
 
 
-@app.route("/auth/register", methods=["GET", "POST"])
+@app.route("/auth/register/", methods=["GET", "POST"])
 def auth_registration():
     if request.method == "GET":
         return render_template("auth/registration_form.html", form=RegistrationForm())
@@ -43,7 +43,7 @@ def auth_registration():
     return redirect(url_for("index"))
 
 
-@app.route("/auth/logout")
+@app.route("/auth/logout/")
 def auth_logout():
     logout_user()
     return redirect(url_for("index"))

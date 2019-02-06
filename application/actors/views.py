@@ -1,25 +1,30 @@
-from application import app, db
 from flask import render_template, request, redirect, url_for
+from flask_login import login_required
+
+from application import app, db
 from application.actors.forms import ActorForm
 from application.actors.models import Actor
 
 
-@app.route("/actors", methods=["GET"])
+@app.route("/actors/", methods=["GET"])
 def actors_index():
     return render_template("actors/list.html", actors=Actor.query.all())
 
 
 @app.route("/actors/new/")
+@login_required
 def actors_add_form():
     return render_template("actors/new.html", form=ActorForm())
 
 
 @app.route("/actors/update/<actor_id>/")
+@login_required
 def actors_update_form(actor_id):
     return render_template("actors/update.html", form=ActorForm(obj=Actor.query.get(actor_id)), actor_id=actor_id)
 
 
 @app.route("/actors/", methods=["POST"])
+@login_required
 def actors_create():
     form = ActorForm(request.form)
 
@@ -35,6 +40,7 @@ def actors_create():
 
 
 @app.route("/actors/delete/<actor_id>/", methods=["POST"])
+@login_required
 def actors_delete(actor_id):
     actor = Actor.query.get(actor_id)
     db.session().delete(actor)
@@ -44,6 +50,7 @@ def actors_delete(actor_id):
 
 
 @app.route("/actors/update/<actor_id>/", methods=["POST"])
+@login_required
 def actors_update(actor_id):
     form = ActorForm(request.form)
 
