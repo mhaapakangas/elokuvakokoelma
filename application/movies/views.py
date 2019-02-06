@@ -1,4 +1,4 @@
-from application import app, db
+from application import app, db, sql_like_key
 from flask import render_template, request, redirect, url_for
 from application.movies.models import Movie
 from application.movies.forms import MovieForm
@@ -98,8 +98,9 @@ def movies_filter():
     stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre, movie.runtime FROM movie"
                 " JOIN movie_cast ON movie_id=movie.id"
                 " JOIN actor ON actor_id=actor.id"
-                " WHERE actor.name LIKE :actorfilter"
+                " WHERE actor.name " + sql_like_key + " :actorfilter"
                 ).params(actorfilter='%' + actorfilter + '%')
+
     res = db.engine.execute(stmt)
     cast = []
     for movie in res:

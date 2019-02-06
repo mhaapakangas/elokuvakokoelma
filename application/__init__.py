@@ -5,11 +5,15 @@ from flask_sqlalchemy import SQLAlchemy
 
 import os
 
+global sql_like_key
+
 if os.environ.get("HEROKU"):
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
+    sql_like_key = "ILIKE"
 else:
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///movies.db"
     app.config["SQLALCHEMY_ECHO"] = True
+    sql_like_key = "LIKE"
 
 db = SQLAlchemy(app)
 
