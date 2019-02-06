@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  <form method="POST" action="{{ url_for('movies_filter') }}">
-    <input type="text" name="filter" />
-    <input type="submit" value="Filter by actor"/>
+  <form method="POST" class="form-inline" action="{{ url_for('movies_filter') }}">
+    <input type="text" class="form-control" name="filter" />
+    <input type="submit" class="btn btn-primary mx-sm-3" value="Filter by actor"/>
   </form>
   {% if filter != "" %}
   <table>
@@ -17,12 +17,12 @@
     </tr>
   </table>
   {% endif %}
-  <table>
+  <table class="table">
     <tr>
-      <th>Movie</th>
-      <th>Year</th>
-      <th>Runtime</th>
-      <th>Genre</th>
+      <th style="border-top-style: none">Movie</th>
+      <th style="border-top-style: none">Year</th>
+      <th style="border-top-style: none">Runtime</th>
+      <th style="border-top-style: none">Genre</th>
     </tr>
     {% for movie in movies %}
     <tr>
@@ -31,23 +31,23 @@
       <td>{{ movie.runtime }}</td>
       <td>{{ movie.genre }}</td>
       <td>
-        <form method="GET" action="{{ url_for('movies_update_form', movie_id=movie.id) }}">
-          <input type="submit" value="Update"/>
-        </form>
-      </td>
-       <td>
-        <form method="POST" action="{{ url_for('movies_delete', movie_id=movie.id) }}">
-          <input type="submit" value="Delete"/>
-        </form>
-      </td>
-      <td>
         <form method="GET" action="{{ url_for('movies_cast_form', movie_id=movie.id) }}">
-          <input type="submit" value="Update cast"/>
+          <input type="submit" class="btn btn-secondary" value="Update cast"/>
         </form>
       </td>
       <td>
         <form method="GET" action="{{ url_for('ratings_form', movie_id=movie.id) }}">
-          <input type="submit" value="Add to my collection"/>
+          <input type="submit" class="btn btn-secondary" value="Add to my collection"/>
+        </form>
+      </td>
+      <td>
+        <form method="GET" action="{{ url_for('movies_update_form', movie_id=movie.id) }}">
+          <input type="submit" class="btn btn-secondary" value="Update"/>
+        </form>
+      </td>
+       <td>
+        <form method="POST" action="{{ url_for('movies_delete', movie_id=movie.id) }}">
+          <input type="submit" class="btn btn-danger" value="Delete"/>
         </form>
       </td>
     </tr>

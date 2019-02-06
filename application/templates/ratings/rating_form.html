@@ -17,7 +17,7 @@
         {{ form.rating.label }}
       </td>
       <td>
-        {{ form.rating }}
+        {{ form.rating(class_='form-control') }}
       </td>
       <td>
         <ul>
@@ -29,7 +29,7 @@
     </tr>
     <tr>
       <td colspan="3">
-        <input type="submit" value="Add to my collection"/>
+        <input type="submit" class="btn btn-primary" value="Add to my collection"/>
       </td>
     </tr>
   </table>

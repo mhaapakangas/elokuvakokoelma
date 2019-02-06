@@ -8,7 +8,7 @@
         {{ form.name.label }}
       </td>
       <td>
-        {{ form.name }}
+        {{ form.name(class_='form-control') }}
       </td>
       <td>
         <ul>
@@ -20,7 +20,7 @@
     </tr>
     <tr>
       <td colspan="3">
-        <input type="submit" value="Update actor"/>
+        <input type="submit" class="btn btn-primary" value="Update actor"/>
       </td>
     </tr>
   </table>

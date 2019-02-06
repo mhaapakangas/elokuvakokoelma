@@ -1,21 +1,21 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  <table>
+  <table class="table">
     <tr>
-      <th>Actor</th>
+      <th style="border-top-style: none">Actor</th>
     </tr>
     {% for actor in actors %}
     <tr>
       <td>{{ actor.name }}</td>
        <td>
         <form method="GET" action="{{ url_for('actors_update_form', actor_id=actor.id) }}">
-          <input type="submit" value="Update"/>
+          <input type="submit" class="btn btn-secondary" value="Update"/>
         </form>
       </td>
        <td>
         <form method="POST" action="{{ url_for('actors_delete', actor_id=actor.id) }}">
-          <input type="submit" value="Delete"/>
+          <input type="submit" class="btn btn-danger" value="Delete"/>
         </form>
       </td>
     </tr>

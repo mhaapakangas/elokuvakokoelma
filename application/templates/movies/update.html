@@ -8,7 +8,7 @@
         {{ form.name.label }}
       </td>
       <td>
-        {{ form.name }}
+        {{ form.name(class_='form-control') }}
       </td>
       <td>
         <ul>
@@ -23,7 +23,7 @@
         {{ form.year.label }}
       </td>
       <td>
-        {{ form.year }}
+        {{ form.year(class_='form-control') }}
       </td>
       <td>
         <ul>
@@ -38,7 +38,7 @@
         {{ form.runtime.label }}
       </td>
       <td>
-        {{ form.runtime }}
+        {{ form.runtime(class_='form-control') }}
       </td>
       <td>
         <ul>
@@ -53,7 +53,7 @@
         {{ form.genre.label }}
       </td>
       <td>
-        {{ form.genre }}
+        {{ form.genre(class_='form-control') }}
       </td>
       <td>
         <ul>
@@ -65,7 +65,7 @@
     </tr>
     <tr>
       <td colspan="3">
-        <input type="submit" value="Update movie"/>
+        <input type="submit" class="btn btn-primary" value="Update movie"/>
       </td>
     </tr>
   </table>

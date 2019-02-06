@@ -9,7 +9,7 @@
         {{ form.name.label }}
       </td>
       <td>
-        {{ form.name }}
+        {{ form.name(class_='form-control') }}
       </td>
       <td>
         <ul>
@@ -23,7 +23,7 @@
         {{ form.username.label }}
       </td>
       <td>
-        {{ form.username }}
+        {{ form.username(class_='form-control') }}
       </td>
       <td>
         <ul>
@@ -37,7 +37,7 @@
         {{ form.password.label }}
       </td>
       <td>
-        {{ form.password }}
+        {{ form.password(class_='form-control') }}
       </td>
       <td>
         <ul>
@@ -48,7 +48,7 @@
     </tr>
     <tr>
       <td colspan="3">
-        <input type="submit" value="Register"/>
+        <input type="submit" class="btn btn-primary" value="Register"/>
       </td>
     </tr>
   </table>
