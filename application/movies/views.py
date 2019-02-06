@@ -93,7 +93,7 @@ def movies_cast(movie_id):
 
 @app.route("/movies/filter/", methods=["POST"])
 def movies_filter():
-    actorfilter = request.form.get("filter")
+    actorfilter = request.form.get("filter").strip()
 
     stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre, movie.runtime FROM movie"
                 " JOIN movie_cast ON movie_id=movie.id"
