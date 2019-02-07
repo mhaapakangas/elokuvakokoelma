@@ -26,18 +26,13 @@
     </tr>
     {% for movie in movies %}
     <tr>
-      <td>{{ movie.name }}</td>
+      <td> <a href="{{ url_for('movies_view', movie_id=movie.id) }}">{{ movie.name }}</a></td>
       <td>{{ movie.year }}</td>
       <td>{{ movie.runtime }}</td>
       <td>{{ movie.genre }}</td>
       <td>
         <form method="GET" action="{{ url_for('movies_cast_form', movie_id=movie.id) }}">
           <input type="submit" class="btn btn-secondary btn-sm" value="Update cast"/>
-        </form>
-      </td>
-      <td>
-        <form method="GET" action="{{ url_for('ratings_form', movie_id=movie.id) }}">
-          <input type="submit" class="btn btn-secondary btn-sm" value="Add to my collection"/>
         </form>
       </td>
       <td>

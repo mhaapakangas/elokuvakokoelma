@@ -1,10 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import BooleanField, IntegerField, validators
+from wtforms import IntegerField, validators
 
 
 class RatingForm(FlaskForm):
-    rating = IntegerField("Rating", [validators.Optional(), validators.NumberRange(min=1, max=10)])
-    want_to_watch = BooleanField("In wishlist")
+    rating = IntegerField("My rating", [validators.Optional(), validators.NumberRange(min=1, max=10)])
 
     class Meta:
         csrf = False

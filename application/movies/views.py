@@ -1,11 +1,13 @@
 from flask import render_template, request, redirect, url_for
-from flask_login import login_required
+from flask_login import login_required, current_user
 from sqlalchemy.sql import text
 
 from application import app, db, sql_like_key
 from application.actors.models import Actor
 from application.movies.forms import MovieForm
 from application.movies.models import Movie
+from application.ratings.models import Rating
+from application.ratings.forms import RatingForm
 
 
 @app.route("/movies/", methods=["GET"])
@@ -23,6 +25,15 @@ def movies_add_form():
 @login_required
 def movies_update_form(movie_id):
     return render_template("movies/update.html", form=MovieForm(obj=Movie.query.get(movie_id)), movie_id=movie_id)
+
+
+@app.route("/movies/view/<movie_id>/")
+def movies_view(movie_id):
+    if current_user.is_authenticated:
+        rating = Rating.query.filter_by(movie_id=movie_id, user_id=current_user.id).first()
+    else:
+        rating = None
+    return render_template("movies/view.html", movie=Movie.query.get(movie_id), form=RatingForm(obj=rating), rating=rating)
 
 
 @app.route("/movies/cast/<movie_id>/")

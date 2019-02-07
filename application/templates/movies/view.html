@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h1>{{ movie.name }} ({{ movie.year }})</h1>
+<div class="row">
+  <div class="col-sm-2">runtime</div>
+  <div class="col-sm-10">{{ movie.runtime }} min</div>
+</div>
+<div class="row">
+  <div class="col-sm-2">genre</div>
+  <div class="col-sm-10">{{ movie.genre }}</div>
+</div>
+
+{% if movie.actors %}
+<h5 style="margin-top:15px;">Cast</h5>
+<ul>
+  {% for actor in movie.actors %}
+  <li>{{ actor.name }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% if current_user.is_authenticated %}
+<form method="POST" action="{{ url_for('update_wishlist', movie_id=movie.id) }}">
+  <label> In wishlist </label>
+  <input type="checkbox"
+         name="wishlist"
+         onclick="this.form.submit();"
+         {% if rating.want_to_watch %} checked {% endif %}/>
+</form>
+
+<form method="POST" action="{{ url_for('add_rating', movie_id=movie.id) }}">
+  <div class="row" style="margin:0">
+    <div style="margin-top:5px; margin-right:10px">{{ form.rating.label }}</div>
+    <div style="width:50px; margin-right:10px">{{ form.rating(class_='form-control') }}</div>
+    <input type="submit" class="btn btn-primary" value="Rate movie"/>
+  </div>
+  <ul>
+    {% for error in form.rating.errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+  </ul>
+</form>
+{% else %}
+<a href="{{ url_for('auth_login') }}">Log in to rate this movie</a>
+{% endif %}
+{% endblock %}
