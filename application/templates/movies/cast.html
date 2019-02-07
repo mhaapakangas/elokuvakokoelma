@@ -1,7 +1,8 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<form method="POST" action="{{ url_for('movies_cast', movie_id=movie_id) }}">
+<h2>{{ movie.name }} ({{ movie.year }})</h2>
+<form method="POST" action="{{ url_for('movies_cast', movie_id=movie.id) }}">
   <table>
     {% for actor in actors %}
     <tr>
@@ -15,7 +16,7 @@
     {% endfor %}
     <tr>
       <td colspan="3">
-        <input type="submit" class="btn btn-primary" value="Update cast"/>
+        <input type="submit" class="btn btn-primary" value="Update cast" style="margin-top:10px"/>
       </td>
     </tr>
   </table>

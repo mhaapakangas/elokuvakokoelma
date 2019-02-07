@@ -2,13 +2,13 @@
 
 {% block body %}
 <h1>{{ movie.name }} ({{ movie.year }})</h1>
-<div class="row">
-  <div class="col-sm-2">runtime</div>
-  <div class="col-sm-10">{{ movie.runtime }} min</div>
+<div class="row" style="margin:0">
+  <div style="width:100px"><strong>Runtime:</strong></div>
+  <div>{{ movie.runtime }} min</div>
 </div>
-<div class="row">
-  <div class="col-sm-2">genre</div>
-  <div class="col-sm-10">{{ movie.genre }}</div>
+<div class="row" style="margin:0">
+  <div style="width:100px"><strong>Genre:</strong></div>
+  <div>{{ movie.genre }}</div>
 </div>
 
 {% if movie.actors %}

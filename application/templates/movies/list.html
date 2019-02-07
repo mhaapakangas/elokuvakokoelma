@@ -6,9 +6,9 @@
     <input type="submit" class="btn btn-primary mx-sm-3" value="Filter by actor"/>
   </form>
   {% if filter != "" %}
-  <table>
+  <table style="margin-top:10px">
     <tr>
-      <td>Current filter: {{ filter }}</td>
+      <td style="padding-right:10px">Current filter: {{ filter }}</td>
       <td>
         <form method="GET" action="{{ url_for('movies_index') }}">
           <input type="submit" class="btn btn-primary btn-sm" value="Remove filter"/>
@@ -28,7 +28,7 @@
     <tr>
       <td> <a href="{{ url_for('movies_view', movie_id=movie.id) }}">{{ movie.name }}</a></td>
       <td>{{ movie.year }}</td>
-      <td>{{ movie.runtime }}</td>
+      <td>{{ movie.runtime }} min</td>
       <td>{{ movie.genre }}</td>
       <td>
         <form method="GET" action="{{ url_for('movies_cast_form', movie_id=movie.id) }}">

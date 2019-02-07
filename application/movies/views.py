@@ -43,7 +43,7 @@ def movies_cast_form(movie_id):
                 " WHERE movie_id = :movie_id").params(movie_id=movie_id)
     res = db.engine.execute(stmt)
     cast = [actor[0] for actor in res]
-    return render_template("movies/cast.html", actors=Actor.query.all(), movie_id=movie_id,
+    return render_template("movies/cast.html", actors=Actor.query.all(), movie=Movie.query.get(movie_id),
                            cast=cast)
 
 
