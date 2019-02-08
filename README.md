@@ -21,3 +21,4 @@ Testikäyttäjä:
 
 [Käyttäjätarinat](documentation/user_stories.md)  
 [Tietokantakaavio](documentation/database_diagram.png)  
+[Tietokantataulujen luontilauseet](documentation/create_table_statements.md)
