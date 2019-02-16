@@ -82,8 +82,13 @@ def movies_create():
 @app.route("/movies/delete/<movie_id>/", methods=["POST"])
 @login_required("ADMIN")
 def movies_delete(movie_id):
+    ratings = Rating.query.filter_by(movie_id=movie_id).all()
+    for rating in ratings:
+        db.session().delete(rating)
+
     movie = Movie.query.get(movie_id)
     db.session().delete(movie)
+
     db.session().commit()
 
     return redirect(url_for("movies_index"))

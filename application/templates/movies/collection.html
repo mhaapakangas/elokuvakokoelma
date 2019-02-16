@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="row">
+  <div class="col-sm-6">
+    <h2>My ratings</h2>
+    {% if not ratings %}
+    <p>
+      No movies rated.
+    </p>
+    {% else %}
+    <div class="col-sm-10">
+      <table class="table">
+        <tr>
+          <th style="border-top-style: none">Movie</th>
+          <th style="border-top-style: none">Rating</th>
+        </tr>
+        {% for rating in ratings %}
+        {% if rating.rating %}
+        <tr>
+          <td>
+            <a href="{{ url_for('movies_view', movie_id=rating.movie.id) }}">{{ rating.movie.name }}</a>
+            ({{ rating.movie.year }})
+          </td>
+          <td>{{ rating.rating }}</td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+      </table>
+    </div>
+    {% endif %}
+  </div>
+  <div class="col-sm-5">
+    <h2>My wishlist</h2>
+    {% for rating in wishlist %}
+    {% if rating.want_to_watch %}
+    <ul>
+      <li>
+        <a href="{{ url_for('movies_view', movie_id=rating.movie.id) }}">{{ rating.movie.name }}</a>
+        ({{ rating.movie.year }})
+      </li>
+    </ul>
+    {% endif %}
+    {% endfor %}
+    {% if not wishlist %}
+    <p>
+      No movies in wishlist.
+    </p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

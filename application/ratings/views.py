@@ -6,6 +6,17 @@ from flask import render_template, redirect, url_for, request
 from flask_login import current_user
 
 
+@app.route("/ratings/collection/")
+@login_required("USER")
+def get_collection():
+    collection = Rating.query.filter_by(user_id=current_user.id).all()
+    ratings = [r for r in collection if r.rating]
+    wishlist = [r for r in collection if r.want_to_watch]
+
+    return render_template("movies/collection.html",
+                           ratings=ratings, wishlist=wishlist)
+
+
 @app.route("/ratings/<movie_id>/", methods=["POST"])
 @login_required("USER")
 def add_rating(movie_id):
