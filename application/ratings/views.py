@@ -1,13 +1,13 @@
-from application import app, db
+from application import app, db, login_required
 from application.movies.models import Movie
 from application.ratings.models import Rating
 from application.ratings.forms import RatingForm
 from flask import render_template, redirect, url_for, request
-from flask_login import login_required, current_user
+from flask_login import current_user
 
 
 @app.route("/ratings/<movie_id>/", methods=["POST"])
-@login_required
+@login_required("USER")
 def add_rating(movie_id):
     rating = Rating.query.filter_by(movie_id=movie_id, user_id=current_user.id).first()
 
@@ -33,7 +33,7 @@ def add_rating(movie_id):
 
 
 @app.route("/ratings/wishlist/<movie_id>/", methods=["POST"])
-@login_required
+@login_required("USER")
 def update_wishlist(movie_id):
     rating = Rating.query.filter_by(movie_id=movie_id, user_id=current_user.id).first()
 

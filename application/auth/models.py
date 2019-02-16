@@ -27,3 +27,9 @@ class User(Base):
 
     def is_authenticated(self):
         return True
+
+    def roles(self):
+        if self.username == "admin":
+            return ["ADMIN"]
+        else:
+            return ["USER"]

@@ -1,8 +1,8 @@
 from flask import render_template, request, redirect, url_for
-from flask_login import login_required, current_user
+from flask_login import current_user
 from sqlalchemy.sql import text
 
-from application import app, db, sql_like_key
+from application import app, db, sql_like_key, login_required
 from application.actors.models import Actor
 from application.movies.forms import MovieForm
 from application.movies.models import Movie
@@ -16,13 +16,13 @@ def movies_index():
 
 
 @app.route("/movies/new/")
-@login_required
+@login_required("ADMIN")
 def movies_add_form():
     return render_template("movies/new.html", form=MovieForm())
 
 
 @app.route("/movies/update/<movie_id>/")
-@login_required
+@login_required("ADMIN")
 def movies_update_form(movie_id):
     return render_template("movies/update.html", form=MovieForm(obj=Movie.query.get(movie_id)), movie_id=movie_id)
 
@@ -37,7 +37,7 @@ def movies_view(movie_id):
 
 
 @app.route("/movies/cast/<movie_id>/")
-@login_required
+@login_required("ADMIN")
 def movies_cast_form(movie_id):
     stmt = text("SELECT actor_id FROM movie_cast"
                 " WHERE movie_id = :movie_id").params(movie_id=movie_id)
@@ -48,7 +48,7 @@ def movies_cast_form(movie_id):
 
 
 @app.route("/movies/", methods=["POST"])
-@login_required
+@login_required("ADMIN")
 def movies_create():
     form = MovieForm(request.form)
 
@@ -67,7 +67,7 @@ def movies_create():
 
 
 @app.route("/movies/delete/<movie_id>/", methods=["POST"])
-@login_required
+@login_required("ADMIN")
 def movies_delete(movie_id):
     movie = Movie.query.get(movie_id)
     db.session().delete(movie)
@@ -77,7 +77,7 @@ def movies_delete(movie_id):
 
 
 @app.route("/movies/update/<movie_id>/", methods=["POST"])
-@login_required
+@login_required("ADMIN")
 def movies_update(movie_id):
     form = MovieForm(request.form)
 
@@ -96,7 +96,7 @@ def movies_update(movie_id):
 
 
 @app.route("/movies/cast/<movie_id>/", methods=["POST"])
-@login_required
+@login_required("ADMIN")
 def movies_cast(movie_id):
     form = request.form
 
