@@ -15,6 +15,19 @@ def movies_index():
     return render_template("movies/list.html", movies=Movie.query.all(), filter="")
 
 
+@app.route("/movies/top", methods=["GET"])
+def movies_top_list():
+    stmt = text("SELECT movie.id, movie.name, movie.year, movie.genre, movie.runtime,"
+                " ROUND(AVG(rating.rating), 1) as average FROM movie"
+                " JOIN rating ON rating.movie_id = movie.id"
+                " WHERE rating.rating IS NOT NULL"
+                " GROUP BY movie.id"
+                " ORDER BY average DESC"
+                " LIMIT 10")
+    res = db.engine.execute(stmt)
+    return render_template("movies/toplist.html", movies=res)
+
+
 @app.route("/movies/new/")
 @login_required("ADMIN")
 def movies_add_form():
@@ -122,10 +135,5 @@ def movies_filter():
                 ).params(actorfilter='%' + actorfilter + '%')
 
     res = db.engine.execute(stmt)
-    cast = []
-    for movie in res:
-        m = Movie(movie[1], movie[2], movie[3], movie[4])
-        m.id = movie[0]
-        cast.append(m)
 
-    return render_template("movies/list.html", movies=cast, filter=actorfilter)
+    return render_template("movies/list.html", movies=res, filter=actorfilter)

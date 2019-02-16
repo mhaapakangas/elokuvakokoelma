@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h2>Top 10 Best Rated Movies</h2>
+<table class="table">
+  <tr>
+    <th style="border-top-style: none">Movie</th>
+    <th style="border-top-style: none">Rating</th>
+  </tr>
+  {% for movie in movies %}
+  <tr>
+    <td> {{ loop.index }}.
+      <a href="{{ url_for('movies_view', movie_id=movie.id) }}">{{ movie.name }}</a>
+      ({{ movie.year }})
+    </td>
+    <td>{{ movie.average }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% if not movies %}
+<p>
+  No movies rated.
+</p>
+{% endif %}
+{% endblock %}

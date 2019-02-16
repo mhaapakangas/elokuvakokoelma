@@ -19,6 +19,9 @@
       <li class="nav-item">
         <a class="nav-link" href="{{ url_for('movies_index') }}">List movies</a>
       </li>
+       <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('movies_top_list') }}">Top rated movies</a>
+      </li>
       {% if current_user.is_authenticated and "ADMIN" in current_user.roles() %}
       <li class="nav-item">
         <a class="nav-link" href="{{ url_for('movies_add_form') }}">Add a movie</a>
