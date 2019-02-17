@@ -4,8 +4,8 @@
 <form method="POST" action="{{ url_for('actors_create') }}">
   <table>
     <tr>
-      <td>
-        {{ form.name.label }}
+      <td style="padding-top:6px; padding-right:10px">
+        <strong>{{ form.name.label }}</strong>
       </td>
       <td>
         {{ form.name(class_='form-control') }}

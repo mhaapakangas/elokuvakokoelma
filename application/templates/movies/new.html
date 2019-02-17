@@ -4,8 +4,8 @@
 <form method="POST" action="{{ url_for('movies_create') }}">
   <table>
     <tr>
-      <td>
-        {{ form.name.label }}
+      <td style="padding-top:6px; padding-right:10px">
+        <strong>{{ form.name.label }}</strong>
       </td>
       <td>
         {{ form.name(class_='form-control') }}
@@ -19,8 +19,8 @@
       </td>
     </tr>
     <tr>
-      <td>
-        {{ form.year.label }}
+      <td style="padding-top:6px; padding-right:10px">
+        <strong>{{ form.year.label }}</strong>
       </td>
       <td>
         {{ form.year(class_='form-control') }}
@@ -34,8 +34,8 @@
       </td>
     </tr>
     <tr>
-      <td>
-        {{ form.runtime.label }}
+      <td style="padding-top:6px; padding-right:10px">
+         <strong>{{ form.runtime.label }}</strong>
       </td>
       <td>
         {{ form.runtime(class_='form-control') }}
@@ -49,8 +49,8 @@
       </td>
     </tr>
     <tr>
-      <td>
-        {{ form.genre.label }}
+      <td style="padding-top:6px; padding-right:10px">
+         <strong>{{ form.genre.label }}</strong>
       </td>
       <td>
         {{ form.genre(class_='form-control') }}

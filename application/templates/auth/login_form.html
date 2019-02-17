@@ -5,16 +5,16 @@
 <form method="POST" action="{{ url_for('auth_login') }}">
   <table>
     <tr>
-      <td>
-        {{ form.username.label }}
+      <td style="padding-top:6px; padding-right:10px">
+        <strong>{{ form.username.label }}</strong>
       </td>
       <td>
         {{ form.username(class_='form-control') }}
       </td>
     </tr>
     <tr>
-      <td>
-        {{ form.password.label }}
+      <td style="padding-top:6px; padding-right:10px">
+        <strong>{{ form.password.label }}</strong>
       </td>
       <td>
         {{ form.password(class_='form-control') }}

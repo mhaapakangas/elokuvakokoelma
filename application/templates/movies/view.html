@@ -29,9 +29,10 @@
   <div class="col-sm-6">
     {% if current_user.is_authenticated and "USER" in current_user.roles() %}
     <form method="POST" action="{{ url_for('update_wishlist', movie_id=movie.id) }}">
-      <strong> In wishlist: </strong>
+      <strong><label for="wishlist"> In wishlist: </label></strong>
       <input type="checkbox"
              name="wishlist"
+             id="wishlist"
              onclick="this.form.submit();"
              {% if rating.want_to_watch %} checked {% endif %}/>
     </form>
