@@ -79,11 +79,25 @@ from application.actors import views
 
 from application.auth.models import User
 
+from sqlalchemy import text
+
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
 
+
+def get_average_rating(movie_id):
+    stmt = text("SELECT ROUND(AVG(rating.rating), 1) FROM movie"
+                " JOIN rating ON rating.movie_id = movie.id"
+                " WHERE rating.rating IS NOT NULL AND movie.id = :id").params(id=movie_id)
+    res = db.engine.execute(stmt)
+    for row in res:
+        return row[0]
+    return None
+
+
+app.jinja_env.globals.update(get_average_rating=get_average_rating)
 
 try:
     db.create_all()

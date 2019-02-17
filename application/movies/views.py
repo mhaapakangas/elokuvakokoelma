@@ -9,10 +9,22 @@ from application.movies.models import Movie
 from application.ratings.models import Rating
 from application.ratings.forms import RatingForm
 
+import sys
+
 
 @app.route("/movies/", methods=["GET"])
-def movies_index():
-    return render_template("movies/list.html", movies=Movie.query.all(), filter="")
+def movies_index(filter_type="title"):
+    return render_template("movies/list.html", movies=Movie.query.all(), filter1="", filter2="",
+                           filter_type=filter_type)
+
+
+@app.route("/movies/", methods=["POST"])
+def movies_index_filter():
+    form = request.form
+    filter_type = form.get("filter_type")
+
+    return render_template("movies/list.html", movies=Movie.query.all(), filter1="", filter2="",
+                           filter_type=filter_type)
 
 
 @app.route("/movies/top", methods=["GET"])
@@ -60,7 +72,7 @@ def movies_cast_form(movie_id):
                            cast=cast)
 
 
-@app.route("/movies/", methods=["POST"])
+@app.route("/movies/add/", methods=["POST"])
 @login_required("ADMIN")
 def movies_create():
     form = MovieForm(request.form)
@@ -129,16 +141,78 @@ def movies_cast(movie_id):
     return redirect(url_for("movies_index"))
 
 
-@app.route("/movies/filter/", methods=["POST"])
-def movies_filter():
-    actorfilter = request.form.get("filter").strip()
+@app.route("/movies/filter/title/", methods=["POST"])
+def movies_filter_title():
+    filter_value = request.form.get("filter1").strip()
+
+    stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre, movie.runtime FROM movie"
+                " WHERE movie.name " + sql_like_key + " :filter_value"
+                ).params(filter_value='%' + filter_value + '%')
+
+    return apply_filter(stmt, filter_value, "", "title")
+
+
+@app.route("/movies/filter/actor/", methods=["POST"])
+def movies_filter_actor():
+    filter_value = request.form.get("filter1").strip()
 
     stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre, movie.runtime FROM movie"
                 " JOIN movie_cast ON movie_id=movie.id"
                 " JOIN actor ON actor_id=actor.id"
-                " WHERE actor.name " + sql_like_key + " :actorfilter"
-                ).params(actorfilter='%' + actorfilter + '%')
+                " WHERE actor.name " + sql_like_key + " :filter_value"
+                ).params(filter_value='%' + filter_value + '%')
 
+    return apply_filter(stmt, filter_value, "", "actor")
+
+
+@app.route("/movies/filter/year/", methods=["POST"])
+def movies_filter_year():
+    form = request.form
+    filter_min = form.get("filter1")
+    if not filter_min:
+        filter_min = 0
+    filter_max = form.get("filter2")
+    if not filter_max:
+        filter_max = sys.maxsize
+
+    stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre, movie.runtime FROM movie"
+                " WHERE movie.year BETWEEN :filter_min AND :filter_max"
+                ).params(filter_min=filter_min, filter_max=filter_max)
+
+    return apply_filter(stmt, form.get("filter1"), form.get("filter2"), "year")
+
+
+@app.route("/movies/filter/rating/", methods=["POST"])
+def movies_filter_rating():
+    form = request.form
+    filter_min = form.get("filter1")
+    if not filter_min:
+        filter_min = 0
+    filter_max = form.get("filter2")
+    if not filter_max:
+        filter_max = 10
+
+    stmt = text("SELECT m.id, m.name, m.year, m.genre, m.runtime,"
+                " ROUND(m.average, 1) as average FROM "
+                "(SELECT movie.id, movie.name, movie.year, movie.genre, movie.runtime,"
+                "AVG(rating.rating) as average FROM movie"
+                " JOIN rating ON rating.movie_id = movie.id"
+                " WHERE rating.rating IS NOT NULL"
+                " GROUP BY movie.id) as m"
+                " WHERE m.average BETWEEN :filter_min AND :filter_max").params(filter_min=int(filter_min),
+                                                                               filter_max=int(filter_max))
+
+    return apply_filter(stmt, form.get("filter1"), form.get("filter2"), "rating")
+
+
+def apply_filter(stmt, filter1, filter2, filter_type):
     res = db.engine.execute(stmt)
 
-    return render_template("movies/list.html", movies=res, filter=actorfilter)
+    movies = []
+    for row in res:
+        m = Movie(row[1], row[2], row[3], row[4])
+        m.id = row[0]
+        movies.append(m)
+
+    return render_template("movies/list.html", movies=movies, filter1=filter1, filter2=filter2, filter_type=filter_type)
+
