@@ -54,11 +54,24 @@ def movies_update_form(movie_id):
 
 @app.route("/movies/view/<movie_id>/")
 def movies_view(movie_id):
+    stmt = text("SELECT rating.rating, COUNT(rating.id) FROM rating"
+                " WHERE rating.rating IS NOT NULL AND rating.movie_id = :movie_id"
+                " GROUP BY rating.rating"
+                " ORDER BY rating.rating").params(movie_id=movie_id)
+    res = db.engine.execute(stmt)
+
+    ratings = [0] * 10
+    for row in res:
+        ratings[row[0] - 1] = row[1]
+    max_rating = max(max(ratings), 1)
+    weighted_ratings = [r/max_rating for r in ratings]
+
     if current_user.is_authenticated:
         rating = Rating.query.filter_by(movie_id=movie_id, user_id=current_user.id).first()
     else:
         rating = None
-    return render_template("movies/view.html", movie=Movie.query.get(movie_id), form=RatingForm(obj=rating), rating=rating)
+    return render_template("movies/view.html", movie=Movie.query.get(movie_id), form=RatingForm(obj=rating),
+                           rating=rating, ratings=weighted_ratings)
 
 
 @app.route("/movies/cast/<movie_id>/")
