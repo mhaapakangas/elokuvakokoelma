@@ -11,20 +11,33 @@ from application.ratings.forms import RatingForm
 
 import sys
 
-
-@app.route("/movies/", methods=["GET"])
-def movies_index(filter_type="title"):
-    return render_template("movies/list.html", movies=Movie.query.all(), filter1="", filter2="",
-                           filter_type=filter_type)
+page_size = 10
 
 
-@app.route("/movies/", methods=["POST"])
-def movies_index_filter():
-    form = request.form
-    filter_type = form.get("filter_type")
+@app.route("/movies/", methods=["GET", "POST"])
+def movies_index():
+    page = request.args.get('p') or 0
+    page = int(page)
 
-    return render_template("movies/list.html", movies=Movie.query.all(), filter1="", filter2="",
-                           filter_type=filter_type)
+    filter_type = None
+    if request.form:
+        filter_type = request.form.get("filter_type")
+
+    if not filter_type:
+        filter_type = "title"
+
+    movie_count = Movie.query.count()
+    last_page = movie_count <= page_size * (page + 1)
+
+    # fetch movies for the current page
+    movies = Movie.query\
+        .order_by(Movie.name)\
+        .offset(page_size * page)\
+        .limit(page_size)\
+        .all()
+
+    return render_template("movies/list.html", movies=movies, filter1="", filter2="", filter_type=filter_type,
+                           page=page, last_page=last_page)
 
 
 @app.route("/movies/top", methods=["GET"])
@@ -156,54 +169,55 @@ def movies_cast(movie_id):
 
 @app.route("/movies/filter/title/", methods=["POST"])
 def movies_filter_title():
-    filter_value = request.form.get("filter1").strip()
+    filter_value = request.form.get('filter1') or request.args.get('filter1') or ""
+    filter_value = filter_value.strip()
 
     stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre, movie.runtime FROM movie"
                 " WHERE movie.name " + sql_like_key + " :filter_value"
+                " ORDER BY movie.name"
                 ).params(filter_value='%' + filter_value + '%')
 
-    return apply_filter(stmt, filter_value, "", "title")
+    return apply_filter(stmt, filter_value, "", "title", request.args.get('p'))
 
 
 @app.route("/movies/filter/actor/", methods=["POST"])
 def movies_filter_actor():
-    filter_value = request.form.get("filter1").strip()
+    filter_value = request.form.get('filter1') or request.args.get('filter1') or ""
+    filter_value = filter_value.strip()
 
     stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre, movie.runtime FROM movie"
                 " JOIN movie_cast ON movie_id=movie.id"
                 " JOIN actor ON actor_id=actor.id"
                 " WHERE actor.name " + sql_like_key + " :filter_value"
+                " ORDER BY movie.name"
                 ).params(filter_value='%' + filter_value + '%')
 
-    return apply_filter(stmt, filter_value, "", "actor")
+    return apply_filter(stmt, filter_value, "", "actor", request.args.get('p'))
 
 
 @app.route("/movies/filter/year/", methods=["POST"])
 def movies_filter_year():
     form = request.form
-    filter_min = form.get("filter1")
-    if not filter_min:
-        filter_min = 0
-    filter_max = form.get("filter2")
-    if not filter_max:
-        filter_max = sys.maxsize
+    filter1 = form.get('filter1') or request.args.get('filter1')
+    filter_min = filter1 or 0
+    filter2 = form.get('filter2') or request.args.get('filter2')
+    filter_max = filter2 or sys.maxsize
 
     stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre, movie.runtime FROM movie"
                 " WHERE movie.year BETWEEN :filter_min AND :filter_max"
+                " ORDER BY movie.name"
                 ).params(filter_min=filter_min, filter_max=filter_max)
 
-    return apply_filter(stmt, form.get("filter1"), form.get("filter2"), "year")
+    return apply_filter(stmt, filter1, filter2, "year", request.args.get('p'))
 
 
 @app.route("/movies/filter/rating/", methods=["POST"])
 def movies_filter_rating():
     form = request.form
-    filter_min = form.get("filter1")
-    if not filter_min:
-        filter_min = 0
-    filter_max = form.get("filter2")
-    if not filter_max:
-        filter_max = 10
+    filter1 = form.get('filter1') or request.args.get('filter1')
+    filter_min = filter1 or 0
+    filter2 = form.get('filter2') or request.args.get('filter2')
+    filter_max = filter2 or 10
 
     stmt = text("SELECT m.id, m.name, m.year, m.genre, m.runtime,"
                 " ROUND(m.average, 1) as average FROM "
@@ -212,20 +226,33 @@ def movies_filter_rating():
                 " JOIN rating ON rating.movie_id = movie.id"
                 " WHERE rating.rating IS NOT NULL"
                 " GROUP BY movie.id) as m"
-                " WHERE m.average BETWEEN :filter_min AND :filter_max").params(filter_min=int(filter_min),
-                                                                               filter_max=int(filter_max))
+                " WHERE m.average BETWEEN :filter_min AND :filter_max"
+                " ORDER BY m.name").params(filter_min=int(filter_min), filter_max=int(filter_max))
 
-    return apply_filter(stmt, form.get("filter1"), form.get("filter2"), "rating")
+    return apply_filter(stmt, filter1, filter2, "rating", request.args.get('p'))
 
 
-def apply_filter(stmt, filter1, filter2, filter_type):
+def apply_filter(stmt, filter1, filter2, filter_type, page):
+    if not page:
+        page = 0
+    page = int(page)
+
     res = db.engine.execute(stmt)
 
-    movies = []
+    all_movies = []
     for row in res:
         m = Movie(row[1], row[2], row[3], row[4])
         m.id = row[0]
-        movies.append(m)
+        all_movies.append(m)
 
-    return render_template("movies/list.html", movies=movies, filter1=filter1, filter2=filter2, filter_type=filter_type)
+    # in a real app filtering movies for the current page should be done in the database query.
+    page_start = page_size * page
+    page_end = page_size * (page + 1)
+    movies = all_movies[page_start:page_end]
+
+    movie_count = len(all_movies)
+    last_page = movie_count <= page_end
+
+    return render_template("movies/list.html", movies=movies,
+                           filter1=filter1, filter2=filter2, filter_type=filter_type, page=page, last_page=last_page)
 
