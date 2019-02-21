@@ -5,16 +5,17 @@
 <div class="row" style="margin-bottom:20px; margin-top:20px; margin-left:0">
 
   <form method="POST" class="form-inline" action="{{ url_for('movies_index') }}">
-    <select class="form-control" name="filter_type" value="{{ filter_type }}" style="margin-right:10px"
+    <label for="filter_by" style="margin-right:8px">Filter movies by</label>
+    <select class="form-control" name="filter_type" id="filter_by" value="{{ filter_type }}" style="margin-right:10px"
             onchange="this.form.submit();" {% if filter1 !="" or filter2 !="" %} disabled {% endif %}>
       <option value="title" {% if filter_type==
-      "title" %} selected {% endif %}>Filter by title</option>
+      "title" %} selected {% endif %}>title</option>
       <option value="actor" {% if filter_type==
-      "actor" %} selected {% endif %}>Filter by actor</option>
+      "actor" %} selected {% endif %}>actor</option>
       <option value="year" {% if filter_type==
-      "year" %} selected {% endif %}>Filter by year</option>
+      "year" %} selected {% endif %}>year</option>
       <option value="rating" {% if filter_type==
-      "rating" %} selected {% endif %}>Filter by rating</option>
+      "rating" %} selected {% endif %}>rating</option>
     </select>
   </form>
 
@@ -32,10 +33,10 @@
   <form method="POST" class="form-inline" action="{{ url_for('movies_filter_year') }}">
     <label for="filter1" style="margin-right:8px"> from </label>
     <input style="width:80px; margin-right:8px" type="number" class="form-control" id="filter1" name="filter1"
-           value="{{ filter1 }}"/>
+           value="{{ filter1 }}" min="1800"/>
     <label for="filter2" style="margin-right:8px"> to </label>
     <input style="width:80px; margin-right:8px" type="number" class="form-control" id="filter2" name="filter2"
-           value="{{ filter2 }}"/>
+           value="{{ filter2 }}" min="1800"/>
     <input type="submit" class="btn btn-primary mx-sm-3" value="Filter"/>
   </form>
   {% elif filter_type == "rating" %}
