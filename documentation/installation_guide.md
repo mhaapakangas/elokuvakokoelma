@@ -1,9 +1,9 @@
-##Asennusohje
+## Asennusohje
 
-###Tarvittavat työkalut
+### Tarvittavat työkalut
 Asenna git, python3 ja Heroku CLI. Tarvitset lisäksi Herokun käyttäjätunnuksen.
 
-###Paikallinen kehitysympäristö
+### Paikallinen kehitysympäristö
 1. Lataa projektin tiedostot koneellesi ja siirry projektikansioon.
     ```
     git clone https://github.com/mhaapakangas/elokuvakokoelma.git
@@ -23,8 +23,8 @@ Asenna git, python3 ja Heroku CLI. Tarvitset lisäksi Herokun käyttäjätunnuks
     python3 run.py
     ```
 
-###Tuotantoympäristö
-1. Lataa projektin tiedostot koneellesi ja siirry projektikansioon..
+### Tuotantoympäristö
+1. Lataa projektin tiedostot koneellesi ja siirry projektikansioon.
     ```
     git clone https://github.com/mhaapakangas/elokuvakokoelma.git
     cd elokuvakokoelma
