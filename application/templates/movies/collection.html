@@ -30,8 +30,9 @@
     </div>
     {% endif %}
   </div>
-  <div class="col-sm-5">
-    <h2>My wishlist</h2>
+  <div class="col-sm-6">
+    <div class="jumbotron" style="max-width:350px">
+    <h3 class="text-center">My wishlist</h3>
     {% for rating in wishlist %}
     {% if rating.want_to_watch %}
     <ul>
@@ -48,5 +49,6 @@
     </p>
     {% endif %}
   </div>
+     </div>
 </div>
 {% endblock %}
