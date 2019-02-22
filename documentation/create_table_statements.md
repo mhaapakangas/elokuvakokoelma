@@ -49,4 +49,6 @@ CREATE TABLE rating (
 	FOREIGN KEY(user_id) REFERENCES account (id),
 	CHECK (want_to_watch IN (0, 1))
 )
+
+CREATE INDEX rating_index_rating ON rating (rating)
 ```
