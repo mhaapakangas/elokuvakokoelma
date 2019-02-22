@@ -31,7 +31,11 @@ def auth_registration():
     if not form.validate():
         return render_template("auth/registration_form.html", form=form)
 
-    # TODO: prevent duplicate usernames
+    existing_users = User.query.filter_by(username=form.username.data).all()
+
+    for existing_user in existing_users:
+        form.username.errors = ["Username already taken"]
+        return render_template("auth/registration_form.html", form=form)
 
     user = User(form.name.data,
                 form.username.data,
