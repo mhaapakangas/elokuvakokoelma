@@ -11,7 +11,7 @@ from application.ratings.forms import RatingForm
 
 import sys
 
-page_size = 10
+page_size = 10  # Number of entries on one page
 
 
 @app.route("/movies/", methods=["GET", "POST"])
@@ -67,16 +67,20 @@ def movies_update_form(movie_id):
 
 @app.route("/movies/view/<movie_id>/")
 def movies_view(movie_id):
+    # Count the number of ratings for each category
     stmt = text("SELECT rating.rating, COUNT(rating.id) FROM rating"
                 " WHERE rating.rating IS NOT NULL AND rating.movie_id = :movie_id"
                 " GROUP BY rating.rating"
                 " ORDER BY rating.rating").params(movie_id=movie_id)
     res = db.engine.execute(stmt)
 
+    # Assign the number of ratings to the correct category. Set the value to zero if there're no ratings.
     ratings = [0] * 10
     for row in res:
         ratings[row[0] - 1] = row[1]
+    # Find the category with the most ratings
     max_rating = max(max(ratings), 1)
+    # Weight each category based on the highest number of ratings
     weighted_ratings = [r/max_rating for r in ratings]
 
     if current_user.is_authenticated:
