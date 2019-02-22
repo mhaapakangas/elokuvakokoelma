@@ -1,23 +1,36 @@
 ## Elokuvakokoelma
 
-Tehtävänä on luoda järjestelmä, jonka avulla käyttäjät voivat pitää kirjaa näkemistään elokuvista sekä elokuvista, jotka he haluaisivat nähdä. Käyttäjä voi lisätä katsomansa elokuvan omaan kokoelmaansa ja antaa sille arvosanan. Lisäksi käyttäjä voi lisätä omalle toivelistalleen elokuvan, jonka haluaisi nähdä. Käyttäjä voi myös muokata arvostelujaan tai poistaa elokuvia omasta kokoelmasta ja toivelistalta. Järjestelmään tallennettuja elokuvia voi hakea nimen, keston, genren, pääosan esittäjien ja käyttäjien antaman arvosanan perusteella.
+Tehtävänä on luoda järjestelmä, jonka avulla käyttäjät voivat pitää kirjaa näkemistään elokuvista sekä elokuvista, jotka he haluaisivat nähdä. Järjestelmään tallennettuja elokuvia voi hakea nimen, genren, pääosan esittäjien ja käyttäjien antaman arvosanan perusteella. Sovelluksesta näkee elokuvien perustiedot, kuten nimen, genren ja elokuvan keston. Lisäksi sovellus kertoo käyttäjien elokuvalle antaman arvosanan ja arvosanojen jakauman.
+
+Käyttäjä voi antaa katsomalleen elokuvalle arvosanan ja lisätä omalle toivelistalleen elokuvan, jonka haluaisi nähdä. Käyttäjä omasta kokoelmasta näkyy annetut arvosanat sekä toivelistalla olevat elokuvat. Käyttäjä voi myös muokata arvostelujaan tai poistaa elokuvia omasta kokoelmasta ja toivelistalta. 
 
 Järjestelmän ylläpitäjä voi lisätä järjestelmään elokuvia ja näyttelijöitä, muokata niiden tietoja sekä poistaa elokuvia ja näyttelijöitä tietokannasta.
 
-Toimintoja:
+### Toimintoja:
 - Elokuvien tietojen lisääminen, muokkaus ja poisto
 - Näyttelijöiden lisääminen, muokkaus ja poisto
 - Elokuvien hakeminen eri hakukriteereillä
 - Käyttäjän rekisteröityminen
 - Ylläpitäjän ja käyttäjän kirjautuminen
-- Elokuvan ja arvostelun lisääminen omaan kokoelmaan
+- Arvosanan antaminen elokuvalle
 - Elokuvan lisääminen toivelistalle
-- Omien arvostelujen muokkaus ja elokuvien poisto omasta kokoelmasta ja toivelistalta
+- Omien arvostelujen ja toivelistan hakeminen
+- Omien arvostelujen muokkaus ja poisto ja elokuvien poisto toivelistalta
+
+### Puutteet:
+- Elokuvien hakeminen genren perusteella
  
-[Sovellus herokussa](https://powerful-lowlands-11008.herokuapp.com/)  
-Testikäyttäjä: 
-- käyttäjä: user
-- salasana: password
+### [Sovellus herokussa](https://powerful-lowlands-11008.herokuapp.com/)
+
+**Ylläpitäjä:** admin  
+**Salasana:** password
+
+**Testikäyttäjä:** user  
+**Salasana:** password
+
+### Dokumentaatio
+[Asennusohjeet](documentation/installation_guide.md)  
+[Käyttöohjeet](documentation/user_guide.md)
 
 [Käyttäjätarinat](documentation/user_stories.md)  
 [Tietokantakaavio](documentation/database_diagram.png)  
