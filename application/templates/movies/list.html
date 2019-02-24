@@ -71,7 +71,7 @@
     <td>{{ movie.year }}</td>
     <td>{{ movie.runtime }} min</td>
     <td>{{ movie.genre }}</td>
-    <td>{{ get_average_rating(movie.id) }}</td>
+    <td>{{ get_average_rating(movie.id) or "-" }}</td>
     {% if current_user.is_authenticated and "ADMIN" in current_user.roles() %}
     <td>
       <form method="GET" action="{{ url_for('movies_cast_form', movie_id=movie.id) }}">

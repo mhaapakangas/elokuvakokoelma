@@ -11,7 +11,9 @@ from flask_login import current_user
 def get_collection():
     collection = Rating.query.filter_by(user_id=current_user.id).all()
     ratings = [r for r in collection if r.rating]
+    ratings.sort(key=lambda r: r.rating, reverse=True)
     wishlist = [r for r in collection if r.want_to_watch]
+    wishlist.sort(key=lambda r: r.movie.name)
 
     return render_template("movies/collection.html",
                            ratings=ratings, wishlist=wishlist)

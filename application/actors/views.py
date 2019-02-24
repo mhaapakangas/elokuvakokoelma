@@ -8,7 +8,7 @@ from application.actors.models import Actor
 @app.route("/actors/", methods=["GET"])
 @login_required("ADMIN")
 def actors_index():
-    return render_template("actors/list.html", actors=Actor.query.all())
+    return render_template("actors/list.html", actors=Actor.query.order_by(Actor.name).all())
 
 
 @app.route("/actors/new/")
