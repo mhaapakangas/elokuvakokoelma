@@ -11,7 +11,7 @@
     {% else %}
     <div class="col-sm-10">
       <table class="table">
-        <tr>
+        <tr class="table-secondary">
           <th style="border-top-style: none">Movie</th>
           <th style="border-top-style: none">Rating</th>
         </tr>
@@ -31,7 +31,7 @@
     {% endif %}
   </div>
   <div class="col-sm-6">
-    <div class="jumbotron" style="max-width:350px">
+    <div class="jumbotron" style="max-width:350px; background-color:#e8e6e4">
     <h3 class="text-center">My wishlist</h3>
     {% for rating in wishlist %}
     {% if rating.want_to_watch %}

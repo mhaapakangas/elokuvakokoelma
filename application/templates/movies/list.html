@@ -53,12 +53,12 @@
 
   {% if filter1 != "" or filter2 != "" %}
   <form method="GET" action="{{ url_for('movies_index') }}">
-    <input type="submit" class="btn btn-primary" value="Reset filter"/>
+    <input type="submit" class="btn btn-secondary" value="Reset filter"/>
   </form>
   {% endif %}
 </div>
 <table class="table">
-  <tr style="font-size:larger">
+  <tr style="font-size:larger" class="table-secondary">
     <th style="border-top-style: none">Movie title</th>
     <th style="border-top-style: none">Year</th>
     <th style="border-top-style: none">Runtime</th>
