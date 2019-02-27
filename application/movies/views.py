@@ -4,7 +4,6 @@ from sqlalchemy.sql import text
 
 from application import app, db, sql_like_key, login_required
 from application.actors.models import Actor
-from application.genres.models import Genre
 from application.movies.forms import MovieForm
 from application.movies.models import Movie
 from application.ratings.models import Rating
@@ -57,16 +56,13 @@ def movies_top_list():
 @app.route("/movies/new/")
 @login_required("ADMIN")
 def movies_add_form():
-    form = MovieForm()
-    form.genre_id.choices = [(g.id, g.name) for g in Genre.query.all()]
-    return render_template("movies/new.html", form=form)
+    return render_template("movies/new.html", form=MovieForm())
 
 
 @app.route("/movies/update/<movie_id>/")
 @login_required("ADMIN")
 def movies_update_form(movie_id):
     form = MovieForm(obj=Movie.query.get(movie_id))
-    form.genre_id.choices = [(g.id, g.name) for g in Genre.query.all()]
     return render_template("movies/update.html", form=form, movie_id=movie_id)
 
 
@@ -111,7 +107,6 @@ def movies_cast_form(movie_id):
 @login_required("ADMIN")
 def movies_create():
     form = MovieForm(request.form)
-    form.genre_id.choices = [(g.id, g.name) for g in Genre.query.all()]
 
     if not form.validate():
         return render_template("movies/new.html", form=form)
@@ -146,7 +141,6 @@ def movies_delete(movie_id):
 @login_required("ADMIN")
 def movies_update(movie_id):
     form = MovieForm(request.form)
-    form.genre_id.choices = [(g.id, g.name) for g in Genre.query.all()]
 
     if not form.validate():
         return render_template("movies/update.html", form=form, movie_id=movie_id)
