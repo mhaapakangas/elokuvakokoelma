@@ -1,19 +1,23 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  <table class="table">
+<h1 style="margin-bottom:30px">Actors</h1>
+<form method="GET" action="{{ url_for('actors_add_form') }}">
+  <input type="submit" class="btn btn-primary" value="Add a new actor"/>
+</form>
+  <table style="margin-top:10px" class="table col-sm-8">
     <tr>
       <th style="border-top-style: none">Actor</th>
     </tr>
     {% for actor in actors %}
     <tr>
-      <td>{{ actor.name }}</td>
-       <td>
+      <td style="width:400px">{{ actor.name }}</td>
+       <td style="width:70px">
         <form method="GET" action="{{ url_for('actors_update_form', actor_id=actor.id) }}">
           <input type="submit" class="btn btn-secondary btn-sm" value="Update"/>
         </form>
       </td>
-       <td>
+       <td style="width:70px">
         <form method="POST" action="{{ url_for('actors_delete', actor_id=actor.id) }}">
           <input type="submit" class="btn btn-danger btn-sm" value="Delete"/>
         </form>
@@ -21,4 +25,9 @@
     </tr>
     {% endfor %}
   </table>
+{% if not actors %}
+<p>
+  No actors found.
+</p>
+{% endif %}
 {% endblock %}

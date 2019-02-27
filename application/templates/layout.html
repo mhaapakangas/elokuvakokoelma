@@ -18,11 +18,11 @@
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
         <a class="nav-link" href="{{ url_for('movies_index') }}">List movies</a>
+        {% if current_user.is_authenticated and "USER" in current_user.roles() %}
       </li>
-       <li class="nav-item">
+      <li class="nav-item">
         <a class="nav-link" href="{{ url_for('movies_top_list') }}">Top rated movies</a>
       </li>
-      {% if current_user.is_authenticated and "USER" in current_user.roles() %}
       <li class="nav-item">
         <a class="nav-link" href="{{ url_for('get_collection') }}">My collection</a>
       </li>
@@ -31,15 +31,12 @@
         <a class="nav-link" href="{{ url_for('movies_add_form') }}">Add a movie</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('actors_index') }}">List actors</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('actors_add_form') }}">Add an actor</a>
+        <a class="nav-link" href="{{ url_for('actors_index') }}">Actors</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{{ url_for('genres_index') }}">Genres</a>
       </li>
-       {% endif %}
+      {% endif %}
     </ul>
     <div class="form-inline mt-2 mt-md-0">
       {% if current_user.is_authenticated %}
