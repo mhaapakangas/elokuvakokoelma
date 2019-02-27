@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h1 style="margin-bottom:30px">Genres</h1>
+<form method="GET" action="{{ url_for('genres_add_form') }}">
+  <input type="submit" class="btn btn-primary" value="Add a new genre"/>
+</form>
+<table style="margin-top:10px" class="table">
+  <tr>
+    <th style="border-top-style: none">Genre name</th>
+  </tr>
+  {% for genre in genres %}
+  <tr>
+    <td>{{ genre.name }}</td>
+    <td>
+      <form method="GET" action="{{ url_for('genres_update_form', genre_id=genre.id) }}">
+        <input type="submit" class="btn btn-secondary btn-sm" value="Update"/>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% if not genres %}
+<p>
+  No genres found.
+</p>
+{% endif %}
+{% endblock %}

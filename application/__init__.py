@@ -65,6 +65,9 @@ def login_required(role="ANY"):
 
 from application import views
 
+from application.genres import models
+from application.genres import views
+
 from application.movies import models
 from application.movies import views
 

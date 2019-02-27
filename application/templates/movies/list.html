@@ -70,7 +70,7 @@
     <td><a href="{{ url_for('movies_view', movie_id=movie.id) }}">{{ movie.name }}</a></td>
     <td>{{ movie.year }}</td>
     <td>{{ movie.runtime }} min</td>
-    <td>{{ movie.genre }}</td>
+    <td>{{ movie.genre.name }}</td>
     <td>{{ get_average_rating(movie.id) or "-" }}</td>
     {% if current_user.is_authenticated and "ADMIN" in current_user.roles() %}
     <td>

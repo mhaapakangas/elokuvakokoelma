@@ -50,14 +50,14 @@
     </tr>
     <tr>
       <td style="padding-top:6px; padding-right:10px">
-        <strong>{{ form.genre.label }}</strong>
+        <strong>{{ form.genre_id.label }}</strong>
       </td>
       <td>
-        {{ form.genre(class_='form-control') }}
+        {{ form.genre_id(class_='form-control') }}
       </td>
       <td>
         <ul>
-          {% for error in form.genre.errors %}
+          {% for error in form.genre_id.errors %}
           <li>{{ error }}</li>
           {% endfor %}
         </ul>

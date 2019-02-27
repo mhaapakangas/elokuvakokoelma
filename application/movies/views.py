@@ -4,6 +4,7 @@ from sqlalchemy.sql import text
 
 from application import app, db, sql_like_key, login_required
 from application.actors.models import Actor
+from application.genres.models import Genre
 from application.movies.forms import MovieForm
 from application.movies.models import Movie
 from application.ratings.models import Rating
@@ -42,7 +43,7 @@ def movies_index():
 
 @app.route("/movies/top", methods=["GET"])
 def movies_top_list():
-    stmt = text("SELECT movie.id, movie.name, movie.year, movie.genre, movie.runtime,"
+    stmt = text("SELECT movie.id, movie.name, movie.year, movie.genre_id, movie.runtime,"
                 " ROUND(AVG(rating.rating), 1) as average FROM movie"
                 " JOIN rating ON rating.movie_id = movie.id"
                 " WHERE rating.rating IS NOT NULL"
@@ -56,13 +57,17 @@ def movies_top_list():
 @app.route("/movies/new/")
 @login_required("ADMIN")
 def movies_add_form():
-    return render_template("movies/new.html", form=MovieForm())
+    form = MovieForm()
+    form.genre_id.choices = [(g.id, g.name) for g in Genre.query.all()]
+    return render_template("movies/new.html", form=form)
 
 
 @app.route("/movies/update/<movie_id>/")
 @login_required("ADMIN")
 def movies_update_form(movie_id):
-    return render_template("movies/update.html", form=MovieForm(obj=Movie.query.get(movie_id)), movie_id=movie_id)
+    form = MovieForm(obj=Movie.query.get(movie_id))
+    form.genre_id.choices = [(g.id, g.name) for g in Genre.query.all()]
+    return render_template("movies/update.html", form=form, movie_id=movie_id)
 
 
 @app.route("/movies/view/<movie_id>/")
@@ -106,13 +111,14 @@ def movies_cast_form(movie_id):
 @login_required("ADMIN")
 def movies_create():
     form = MovieForm(request.form)
+    form.genre_id.choices = [(g.id, g.name) for g in Genre.query.all()]
 
     if not form.validate():
         return render_template("movies/new.html", form=form)
 
     movie = Movie(form.name.data,
                   form.year.data,
-                  form.genre.data,
+                  form.genre_id.data,
                   form.runtime.data)
 
     db.session().add(movie)
@@ -140,6 +146,7 @@ def movies_delete(movie_id):
 @login_required("ADMIN")
 def movies_update(movie_id):
     form = MovieForm(request.form)
+    form.genre_id.choices = [(g.id, g.name) for g in Genre.query.all()]
 
     if not form.validate():
         return render_template("movies/update.html", form=form, movie_id=movie_id)
@@ -148,7 +155,7 @@ def movies_update(movie_id):
     movie.name = form.name.data
     movie.year = form.year.data
     movie.runtime = form.runtime.data
-    movie.genre = form.genre.data
+    movie.genre_id = form.genre_id.data
 
     db.session().commit()
 
@@ -176,7 +183,7 @@ def movies_filter_title():
     filter_value = request.form.get('filter1') or request.args.get('filter1') or ""
     filter_value = filter_value.strip()
 
-    stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre, movie.runtime FROM movie"
+    stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre_id, movie.runtime FROM movie"
                 " WHERE movie.name " + sql_like_key + " :filter_value"
                 " ORDER BY movie.name"
                 ).params(filter_value='%' + filter_value + '%')
@@ -189,7 +196,7 @@ def movies_filter_actor():
     filter_value = request.form.get('filter1') or request.args.get('filter1') or ""
     filter_value = filter_value.strip()
 
-    stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre, movie.runtime FROM movie"
+    stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre_id, movie.runtime FROM movie"
                 " JOIN movie_cast ON movie_id=movie.id"
                 " JOIN actor ON actor_id=actor.id"
                 " WHERE actor.name " + sql_like_key + " :filter_value"
@@ -207,7 +214,7 @@ def movies_filter_year():
     filter2 = form.get('filter2') or request.args.get('filter2')
     filter_max = filter2 or sys.maxsize
 
-    stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre, movie.runtime FROM movie"
+    stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre_id, movie.runtime FROM movie"
                 " WHERE movie.year BETWEEN :filter_min AND :filter_max"
                 " ORDER BY movie.name"
                 ).params(filter_min=filter_min, filter_max=filter_max)
@@ -223,9 +230,9 @@ def movies_filter_rating():
     filter2 = form.get('filter2') or request.args.get('filter2')
     filter_max = filter2 or 10
 
-    stmt = text("SELECT m.id, m.name, m.year, m.genre, m.runtime,"
+    stmt = text("SELECT m.id, m.name, m.year, m.genre_id, m.runtime,"
                 " ROUND(m.average, 1) as average FROM "
-                "(SELECT movie.id, movie.name, movie.year, movie.genre, movie.runtime,"
+                "(SELECT movie.id, movie.name, movie.year, movie.genre_id, movie.runtime,"
                 "AVG(rating.rating) as average FROM movie"
                 " JOIN rating ON rating.movie_id = movie.id"
                 " WHERE rating.rating IS NOT NULL"
