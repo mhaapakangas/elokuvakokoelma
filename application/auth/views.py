@@ -5,6 +5,8 @@ from application import app, db
 from application.auth.models import User
 from application.auth.forms import LoginForm, RegistrationForm
 
+from sqlalchemy.exc import IntegrityError
+
 
 @app.route("/auth/login/", methods=["GET", "POST"])
 def auth_login():
@@ -31,18 +33,16 @@ def auth_registration():
     if not form.validate():
         return render_template("auth/registration_form.html", form=form)
 
-    existing_users = User.query.filter_by(username=form.username.data).all()
-
-    for existing_user in existing_users:
+    try:
+        user = User(form.name.data,
+                    form.username.data,
+                    form.password.data)
+        db.session().add(user)
+        db.session().commit()
+    except IntegrityError:
+        db.session().rollback()
         form.username.errors = ["Username already taken"]
         return render_template("auth/registration_form.html", form=form)
-
-    user = User(form.name.data,
-                form.username.data,
-                form.password.data)
-
-    db.session().add(user)
-    db.session().commit()
 
     return redirect(url_for("index"))
 

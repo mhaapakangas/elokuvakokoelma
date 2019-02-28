@@ -1,4 +1,5 @@
 from flask import render_template, request, redirect, url_for
+from sqlalchemy.exc import IntegrityError
 
 from application import app, db, login_required
 from application.genres.forms import GenreForm
@@ -31,10 +32,14 @@ def genres_create():
     if not form.validate():
         return render_template("genres/new.html", form=form)
 
-    genre = Genre(form.name.data)
-
-    db.session().add(genre)
-    db.session().commit()
+    try:
+        genre = Genre(form.name.data)
+        db.session().add(genre)
+        db.session().commit()
+    except IntegrityError:
+        db.session().rollback()
+        form.name.errors = ["Duplicate genre name"]
+        return render_template("genres/new.html", form=form)
 
     return redirect(url_for("genres_index"))
 
