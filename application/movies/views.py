@@ -4,11 +4,11 @@ from sqlalchemy.sql import text
 
 from application import app, db, login_required
 from application.actors.models import Actor
+from application.genres.models import Genre
 from application.movies.forms import MovieForm
 from application.movies.models import Movie
-from application.ratings.models import Rating
 from application.ratings.forms import RatingForm
-from application.genres.models import Genre
+from application.ratings.models import Rating
 
 page_size = 10  # Number of entries on one page
 
@@ -41,15 +41,8 @@ def movies_index():
 
 @app.route("/movies/top", methods=["GET"])
 def movies_top_list():
-    stmt = text("SELECT movie.id, movie.name, movie.year, movie.genre_id, movie.runtime,"
-                " ROUND(AVG(rating.rating), 1) as average FROM movie"
-                " JOIN rating ON rating.movie_id = movie.id"
-                " WHERE rating.rating IS NOT NULL"
-                " GROUP BY movie.id"
-                " ORDER BY average DESC"
-                " LIMIT 10")
-    res = db.engine.execute(stmt)
-    return render_template("movies/toplist.html", movies=res)
+    movies = Movie.get_best_rated_movies()
+    return render_template("movies/toplist.html", movies=movies)
 
 
 @app.route("/movies/new/")
@@ -68,16 +61,12 @@ def movies_update_form(movie_id):
 @app.route("/movies/view/<movie_id>/")
 def movies_view(movie_id):
     # Count the number of ratings for each category
-    stmt = text("SELECT rating.rating, COUNT(rating.id) FROM rating"
-                " WHERE rating.rating IS NOT NULL AND rating.movie_id = :movie_id"
-                " GROUP BY rating.rating"
-                " ORDER BY rating.rating").params(movie_id=movie_id)
-    res = db.engine.execute(stmt)
+    res = Rating.count_ratings_per_category(movie_id)
 
     # Assign the number of ratings to the correct category. Set the value to zero if there're no ratings.
     ratings = [0] * 10
-    for row in res:
-        ratings[row[0] - 1] = row[1]
+    for result in res:
+        ratings[result.get("rating") - 1] = result.get("count")
     # Find the category with the most ratings
     max_rating = max(max(ratings), 1)
     # Weight each category based on the highest number of ratings

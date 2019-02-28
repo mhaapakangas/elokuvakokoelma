@@ -18,11 +18,11 @@
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
         <a class="nav-link" href="{{ url_for('movies_index') }}">List movies</a>
-        {% if current_user.is_authenticated and "USER" in current_user.roles() %}
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{{ url_for('movies_top_list') }}">Top rated movies</a>
       </li>
+      {% if current_user.is_authenticated and "USER" in current_user.roles() %}
       <li class="nav-item">
         <a class="nav-link" href="{{ url_for('get_collection') }}">My collection</a>
       </li>

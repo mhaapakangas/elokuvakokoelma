@@ -100,7 +100,15 @@ def get_average_rating(movie_id):
     return None
 
 
+def get_genre_name(genre_id):
+    genre = genres.models.Genre.query.get(genre_id)
+    if genre:
+        return genre.name
+    return None
+
+
 app.jinja_env.globals.update(get_average_rating=get_average_rating)
+app.jinja_env.globals.update(get_genre_name=get_genre_name)
 
 try:
     db.create_all()

@@ -1,9 +1,7 @@
 from application import db, sql_like_key
 from application.models import Base
-from application.genres.models import Genre
 
 from sqlalchemy.sql import text
-import sys
 
 Cast = db.Table('movie_cast',
                 db.Column('actor_id', db.Integer, db.ForeignKey('actor.id'), primary_key=True),
@@ -27,20 +25,22 @@ class Movie(Base):
         self.genre_id = genre_id
         self.runtime = runtime
 
-    def get_genre(self):
-        return Genre.query.get(self.genre_id)
-
     @staticmethod
-    def apply_filter(stmt):
+    def get_best_rated_movies():
+        stmt = text("SELECT movie.id, movie.name, movie.year, ROUND(AVG(rating.rating), 1) as average"
+                    " FROM movie"
+                    " JOIN rating ON rating.movie_id = movie.id"
+                    " WHERE rating.rating IS NOT NULL"
+                    " GROUP BY movie.id"
+                    " ORDER BY average DESC"
+                    " LIMIT 10")
+
         res = db.engine.execute(stmt)
-
-        movies = []
+        response = []
         for row in res:
-            m = Movie(row[1], row[2], row[3], row[4])
-            m.id = row[0]
-            movies.append(m)
+            response.append({"id": row[0], "name": row[1], "year": row[2], "average": row[3]})
 
-        return movies
+        return response
 
     @staticmethod
     def get_movies_by_title(title_filter):
@@ -80,7 +80,7 @@ class Movie(Base):
     @staticmethod
     def get_movies_by_year(min_year, max_year):
         filter_min = min_year or 0
-        filter_max = max_year or sys.maxsize
+        filter_max = max_year or 99999
 
         stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre_id, movie.runtime FROM movie"
                     " WHERE movie.year BETWEEN :filter_min AND :filter_max"
@@ -105,3 +105,13 @@ class Movie(Base):
                     " ORDER BY m.name").params(filter_min=int(filter_min), filter_max=int(filter_max))
 
         return Movie.apply_filter(stmt)
+
+    @staticmethod
+    def apply_filter(stmt):
+        res = db.engine.execute(stmt)
+
+        movies = []
+        for row in res:
+            movies.append({"id": row[0], "name": row[1], "year": row[2], "genre_id": row[3], "runtime": row[4]})
+
+        return movies
