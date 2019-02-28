@@ -8,10 +8,16 @@ Ylläpitäjän tili luodaan automaattisesti, kun sovellus käynnistetään. Sen 
 UPDATE account SET password='newpassword' WHERE name='admin';
 ```
 
-Ylläpitäjä voi lisätä elokuvia ja näyttelijöitä tietokantaan. Elokuvien listauksessa voi muokata kunkin elokuvan tietoja, muuttaa elokuvan näyttelijöitä tai poistaa elokuvia tietokannasta. Näyttelijöiden listauksesta voi muokata näyttelijöiden tietoja tai poistaa näyttelijöitä tietokannasta.
+Ylläpitäjä voi lisätä elokuvia tietokantaan yläpalkin 'Add a movie' -linkistä. Elokuvien listauksessa sovelluksen kotisivulla voi muokata kunkin elokuvan tietoja, muokata elokuvissa esiintyviä näyttelijöitä 'Update cast'-linkistä tai poistaa elokuvia tietokannasta. 
+
+Tietokannassa olevat elokuvien genret näkee palkin 'Genres'-linkistä, ja samalta sivulta voi lisätä uusia genrejä tai muokata vanhojen nimiä.
+
+Listauksen tietokannan näyttelijöistä näkee 'Actors'-linkin takana olevalta sivulta, jolta voi myös lisätä näyttelijöitä tietokantaan.  Näyttelijöiden listauksesta voi lisäksi muokata näyttelijöiden tietoja tai poistaa näyttelijöitä tietokannasta.
 
 ### Käyttäjän ohjeet
 
-Kirjautumatta sisään käyttäjä voi hakea tietokannasta elokuvia elokuvan nimen, näyttelijöiden, vuoden tai käyttäjien antaman arvosanan perusteella. Lisäksi käyttäjä voi tarkastella listaa parhaiten arvostelluista elokuvista tai minkä tahansa elokuvan omaa sivua. Se sisältää perustiedot elokuvasta sekä sen saamien arvosanojen jakauman.
+Kirjautumatta sisään käyttäjä voi hakea etusivulla elokuvia elokuvan nimen, näyttelijöiden, genren, vuoden tai käyttäjien antaman arvosanan perusteella. Hakukategoria valitaan alasvetovalikosta. Elokuvia voi etsiä haluamallaan hakusanalla tai ehdolla 'Filter'-napista. Hakuehtojen poistaminen ja -kategorian vaihtaminen onnistuu 'Reset filter'-napista.
 
-Käyttäjä voi myös rekisteröityä sovellukseen. Sisäänkirjautuneena käyttäjä voi lisätä elokuvan toivelistalleen tai antaa sille arvosanan elokuvan omalta sivulta. Samalta sivulta voi myös poistaa elokuvan toivelistalta ja poistaa tai muokata annettua arvosanaa. Käyttäjä näkee omasta kokoelmasta omat arvostelunsa ja toivelistansa sisällön. 
+Kirjautumaton käyttäjä voi tarkastella listaa parhaiten arvostelluista elokuvista yläpalkin 'Top rated movies'-linkistä. Minkä tahansa elokuvan nimen linkistä pääsee elokuvan omalle sivulle. Se sisältää perustiedot elokuvasta sekä sen käyttäjiltä saamien arvosanojen jakauman.
+
+Käyttäjä voi myös rekisteröityä sovellukseen. Sisäänkirjautuneena käyttäjä voi lisätä elokuvan toivelistalleen tai antaa sille arvosanan elokuvan omalta sivulta. Samalta sivulta voi myös poistaa elokuvan toivelistalta ja poistaa tai muokata annettua arvosanaa. Yläpalkin 'My collection'-linkistä käyttäjä näkee elokuvilla antamansa arvostelut sekä toivelistansa sisällön. 
