@@ -55,6 +55,15 @@ class Movie(Base):
         return Movie.apply_filter(stmt)
 
     @staticmethod
+    def get_movies_by_genre(genre_id):
+        stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre_id, movie.runtime FROM movie"
+                    " WHERE movie.genre_id = :filter_value"
+                    " ORDER BY movie.name"
+                    ).params(filter_value=genre_id)
+
+        return Movie.apply_filter(stmt)
+
+    @staticmethod
     def get_movies_by_actor(actor_filter):
         filter_value = actor_filter or ""
         filter_value = filter_value.strip()

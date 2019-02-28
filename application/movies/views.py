@@ -8,6 +8,7 @@ from application.movies.forms import MovieForm
 from application.movies.models import Movie
 from application.ratings.models import Rating
 from application.ratings.forms import RatingForm
+from application.genres.models import Genre
 
 page_size = 10  # Number of entries on one page
 
@@ -34,8 +35,8 @@ def movies_index():
         .limit(page_size)\
         .all()
 
-    return render_template("movies/list.html", movies=movies, filter1="", filter2="", filter_type=filter_type,
-                           page=page, last_page=last_page)
+    return render_template("movies/list.html", movies=movies, genres=Genre.query.all(), filter1="", filter2="",
+                           filter_type=filter_type, page=page, last_page=last_page)
 
 
 @app.route("/movies/top", methods=["GET"])
@@ -185,6 +186,8 @@ def movies_filter(filter_type):
         all_movies = Movie.get_movies_by_year(filter1, filter2)
     elif filter_type == "rating":
         all_movies = Movie.get_movies_by_rating(filter1, filter2)
+    elif filter_type == "genre":
+        all_movies = Movie.get_movies_by_genre(filter1)
 
     page = request.args.get('p')
     if not page:
@@ -199,6 +202,6 @@ def movies_filter(filter_type):
     movie_count = len(all_movies)
     last_page = movie_count <= page_end
 
-    return render_template("movies/list.html", movies=movies, filter1=filter1, filter2=filter2,
+    return render_template("movies/list.html", movies=movies, genres=Genre.query.all(), filter1=filter1, filter2=filter2,
                            filter_type=filter_type, page=page, last_page=last_page)
 

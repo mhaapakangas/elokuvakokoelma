@@ -10,14 +10,23 @@
             onchange="this.form.submit();" {% if filter1 !="" or filter2 !="" %} disabled {% endif %}>
       <option value="title" {% if filter_type=="title" %} selected {% endif %}>title</option>
       <option value="actor" {% if filter_type=="actor" %} selected {% endif %}>actor</option>
+      <option value="genre" {% if filter_type=="genre" %} selected {% endif %}>genre</option>
       <option value="year" {% if filter_type=="year" %} selected {% endif %}>year</option>
       <option value="rating" {% if filter_type=="rating" %} selected {% endif %}>rating</option>
     </select>
   </form>
-
   {% if filter_type == "title" or filter_type == "actor"%}
   <form method="POST" class="form-inline" action="{{ url_for('movies_filter', filter_type=filter_type) }}">
     <input type="text" class="form-control" name="filter1" value="{{ filter1 }}"/>
+    <input type="submit" class="btn btn-primary mx-sm-3" value="Filter"/>
+  </form>
+  {% elif filter_type == "genre" %}
+  <form method="POST" class="form-inline" action="{{ url_for('movies_filter', filter_type=filter_type) }}">
+    <select class="form-control" name="filter1" value="{{ filter1 }}">
+      {% for genre in genres %}
+      <option value={{ genre.id }} {% if filter1==genre.id|string %} selected {% endif %}>{{ genre.name }}</option>
+      {% endfor %}
+    </select>
     <input type="submit" class="btn btn-primary mx-sm-3" value="Filter"/>
   </form>
   {% elif filter_type == "year" %}
