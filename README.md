@@ -18,9 +18,11 @@ Järjestelmän ylläpitäjä voi lisätä järjestelmään elokuvia ja näytteli
 - Omien arvostelujen muokkaus ja poisto ja elokuvien poisto toivelistalta
 
 ### Kehitysideoita:
-- Näyttelijöiden omien sivujen lisääminen, joilta käyttäjä näkisi missä elokuvissa näyttelijä on esiintynyt
+- Näyttelijöiden omien sivujen lisääminen, joilta käyttäjä näkisi missä elokuvissa näyttelijä on esiintynyt.
  
 - Toisten, samalle elokuvalle hyvän arvosanan antaneiden käyttäjien profiilien näyttäminen. Näin käyttäjä saisi ehdotuksia kiinnostavista elokuvista sen perusteella, minkälaisia arvosanoja käyttäjät, joilla on samankaltainen maku, ovat antaneet.
+
+- Mahdollisuus lisätä arvosanan lisäksi sanallisia arvosteluja elokuville.
 
 ## Sovellus herokussa
 ### [Linkki sovellukseen](https://powerful-lowlands-11008.herokuapp.com/)
@@ -36,5 +38,5 @@ Järjestelmän ylläpitäjä voi lisätä järjestelmään elokuvia ja näytteli
 [Käyttöohjeet](documentation/user_guide.md)
 
 [Käyttäjätarinat](documentation/user_stories.md)  
-[Tietokantakaavio](documentation/database_diagram.png)  
+[Tietokantakaavio](documentation/database_diagram.jpg)  
 [Tietokantataulujen luontilauseet](documentation/create_table_statements.md)
