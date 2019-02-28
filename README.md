@@ -17,10 +17,13 @@ Järjestelmän ylläpitäjä voi lisätä järjestelmään elokuvia ja näytteli
 - Omien arvostelujen ja toivelistan hakeminen
 - Omien arvostelujen muokkaus ja poisto ja elokuvien poisto toivelistalta
 
-### Puutteet:
-- Elokuvien hakeminen genren perusteella
+### Kehitysideoita:
+- Näyttelijöiden omien sivujen lisääminen, joilta käyttäjä näkisi missä elokuvissa näyttelijä on esiintynyt
  
-### [Sovellus herokussa](https://powerful-lowlands-11008.herokuapp.com/)
+- Toisten, samalle elokuvalle hyvän arvosanan antaneiden käyttäjien profiilien näyttäminen. Näin käyttäjä saisi ehdotuksia kiinnostavista elokuvista sen perusteella, minkälaisia arvosanoja käyttäjät, joilla on samankaltainen maku, ovat antaneet.
+
+## Sovellus herokussa
+### [Linkki sovellukseen](https://powerful-lowlands-11008.herokuapp.com/)
 
 **Ylläpitäjä:** admin  
 **Salasana:** password
@@ -28,7 +31,7 @@ Järjestelmän ylläpitäjä voi lisätä järjestelmään elokuvia ja näytteli
 **Testikäyttäjä:** user  
 **Salasana:** password
 
-### Dokumentaatio
+## Dokumentaatio
 [Asennusohjeet](documentation/installation_guide.md)  
 [Käyttöohjeet](documentation/user_guide.md)
 
