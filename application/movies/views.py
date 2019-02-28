@@ -2,14 +2,12 @@ from flask import render_template, request, redirect, url_for
 from flask_login import current_user
 from sqlalchemy.sql import text
 
-from application import app, db, sql_like_key, login_required
+from application import app, db, login_required
 from application.actors.models import Actor
 from application.movies.forms import MovieForm
 from application.movies.models import Movie
 from application.ratings.models import Rating
 from application.ratings.forms import RatingForm
-
-import sys
 
 page_size = 10  # Number of entries on one page
 
@@ -172,83 +170,26 @@ def movies_cast(movie_id):
     return redirect(url_for("movies_index"))
 
 
-@app.route("/movies/filter/title/", methods=["POST"])
-def movies_filter_title():
-    filter_value = request.form.get('filter1') or request.args.get('filter1') or ""
-    filter_value = filter_value.strip()
-
-    stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre_id, movie.runtime FROM movie"
-                " WHERE movie.name " + sql_like_key + " :filter_value"
-                " ORDER BY movie.name"
-                ).params(filter_value='%' + filter_value + '%')
-
-    return apply_filter(stmt, filter_value, "", "title", request.args.get('p'))
-
-
-@app.route("/movies/filter/actor/", methods=["POST"])
-def movies_filter_actor():
-    filter_value = request.form.get('filter1') or request.args.get('filter1') or ""
-    filter_value = filter_value.strip()
-
-    stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre_id, movie.runtime FROM movie"
-                " JOIN movie_cast ON movie_id=movie.id"
-                " JOIN actor ON actor_id=actor.id"
-                " WHERE actor.name " + sql_like_key + " :filter_value"
-                " ORDER BY movie.name"
-                ).params(filter_value='%' + filter_value + '%')
-
-    return apply_filter(stmt, filter_value, "", "actor", request.args.get('p'))
-
-
-@app.route("/movies/filter/year/", methods=["POST"])
-def movies_filter_year():
+@app.route("/movies/filter/<filter_type>/", methods=["POST"])
+def movies_filter(filter_type):
     form = request.form
     filter1 = form.get('filter1') or request.args.get('filter1')
-    filter_min = filter1 or 0
     filter2 = form.get('filter2') or request.args.get('filter2')
-    filter_max = filter2 or sys.maxsize
 
-    stmt = text("SELECT DISTINCT movie.id, movie.name, movie.year, movie.genre_id, movie.runtime FROM movie"
-                " WHERE movie.year BETWEEN :filter_min AND :filter_max"
-                " ORDER BY movie.name"
-                ).params(filter_min=filter_min, filter_max=filter_max)
+    all_movies = []
+    if filter_type == "title":
+        all_movies = Movie.get_movies_by_title(filter1)
+    elif filter_type == "actor":
+        all_movies = Movie.get_movies_by_actor(filter1)
+    elif filter_type == "year":
+        all_movies = Movie.get_movies_by_year(filter1, filter2)
+    elif filter_type == "rating":
+        all_movies = Movie.get_movies_by_rating(filter1, filter2)
 
-    return apply_filter(stmt, filter1, filter2, "year", request.args.get('p'))
-
-
-@app.route("/movies/filter/rating/", methods=["POST"])
-def movies_filter_rating():
-    form = request.form
-    filter1 = form.get('filter1') or request.args.get('filter1')
-    filter_min = filter1 or 0
-    filter2 = form.get('filter2') or request.args.get('filter2')
-    filter_max = filter2 or 10
-
-    stmt = text("SELECT m.id, m.name, m.year, m.genre_id, m.runtime,"
-                " ROUND(m.average, 1) as average FROM "
-                "(SELECT movie.id, movie.name, movie.year, movie.genre_id, movie.runtime,"
-                "AVG(rating.rating) as average FROM movie"
-                " JOIN rating ON rating.movie_id = movie.id"
-                " WHERE rating.rating IS NOT NULL"
-                " GROUP BY movie.id) as m"
-                " WHERE m.average BETWEEN :filter_min AND :filter_max"
-                " ORDER BY m.name").params(filter_min=int(filter_min), filter_max=int(filter_max))
-
-    return apply_filter(stmt, filter1, filter2, "rating", request.args.get('p'))
-
-
-def apply_filter(stmt, filter1, filter2, filter_type, page):
+    page = request.args.get('p')
     if not page:
         page = 0
     page = int(page)
-
-    res = db.engine.execute(stmt)
-
-    all_movies = []
-    for row in res:
-        m = Movie(row[1], row[2], row[3], row[4])
-        m.id = row[0]
-        all_movies.append(m)
 
     # in a real app filtering movies for the current page should be done in the database query.
     page_start = page_size * page
@@ -258,6 +199,6 @@ def apply_filter(stmt, filter1, filter2, filter_type, page):
     movie_count = len(all_movies)
     last_page = movie_count <= page_end
 
-    return render_template("movies/list.html", movies=movies,
-                           filter1=filter1, filter2=filter2, filter_type=filter_type, page=page, last_page=last_page)
+    return render_template("movies/list.html", movies=movies, filter1=filter1, filter2=filter2,
+                           filter_type=filter_type, page=page, last_page=last_page)
 

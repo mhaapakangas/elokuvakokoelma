@@ -8,29 +8,20 @@
     <label for="filter_by" style="margin-right:8px">Filter movies by</label>
     <select class="form-control" name="filter_type" id="filter_by" value="{{ filter_type }}" style="margin-right:10px"
             onchange="this.form.submit();" {% if filter1 !="" or filter2 !="" %} disabled {% endif %}>
-      <option value="title" {% if filter_type==
-      "title" %} selected {% endif %}>title</option>
-      <option value="actor" {% if filter_type==
-      "actor" %} selected {% endif %}>actor</option>
-      <option value="year" {% if filter_type==
-      "year" %} selected {% endif %}>year</option>
-      <option value="rating" {% if filter_type==
-      "rating" %} selected {% endif %}>rating</option>
+      <option value="title" {% if filter_type=="title" %} selected {% endif %}>title</option>
+      <option value="actor" {% if filter_type=="actor" %} selected {% endif %}>actor</option>
+      <option value="year" {% if filter_type=="year" %} selected {% endif %}>year</option>
+      <option value="rating" {% if filter_type=="rating" %} selected {% endif %}>rating</option>
     </select>
   </form>
 
-  {% if filter_type == "title" %}
-  <form method="POST" class="form-inline" action="{{ url_for('movies_filter_title') }}">
-    <input type="text" class="form-control" name="filter1" value="{{ filter1 }}"/>
-    <input type="submit" class="btn btn-primary mx-sm-3" value="Filter"/>
-  </form>
-  {% elif filter_type == "actor" %}
-  <form method="POST" class="form-inline" action="{{ url_for('movies_filter_actor') }}">
+  {% if filter_type == "title" or filter_type == "actor"%}
+  <form method="POST" class="form-inline" action="{{ url_for('movies_filter', filter_type=filter_type) }}">
     <input type="text" class="form-control" name="filter1" value="{{ filter1 }}"/>
     <input type="submit" class="btn btn-primary mx-sm-3" value="Filter"/>
   </form>
   {% elif filter_type == "year" %}
-  <form method="POST" class="form-inline" action="{{ url_for('movies_filter_year') }}">
+  <form method="POST" class="form-inline" action="{{ url_for('movies_filter', filter_type=filter_type) }}">
     <label for="filter1" style="margin-right:8px"> from </label>
     <input style="width:80px; margin-right:8px" type="number" class="form-control" id="filter1" name="filter1"
            value="{{ filter1 }}" min="1800"/>
@@ -40,7 +31,7 @@
     <input type="submit" class="btn btn-primary mx-sm-3" value="Filter"/>
   </form>
   {% elif filter_type == "rating" %}
-  <form method="POST" class="form-inline" action="{{ url_for('movies_filter_rating') }}">
+  <form method="POST" class="form-inline" action="{{ url_for('movies_filter', filter_type=filter_type) }}">
     <label for="filter1" style="margin-right:8px"> from </label>
     <input style="width:80px; margin-right:8px" type="number" class="form-control"
            name="filter1" id="filter1" value="{{ filter1 }}" min="0" max="10"/>
@@ -93,44 +84,18 @@
   {% endfor %}
 </table>
 <div class="row justify-content-between">
-{% if page > 0 %}
-  {% if filter_type == "title" %}
-  <form method="POST" action="{{ url_for('movies_filter_title', filter1=filter1, p=page - 1) }}">
-    <input type="submit" class="btn btn-secondary btn-sm" value="Previous page"/>
-  </form>
-  {% elif filter_type == "actor" %}
-  <form method="POST" action="{{ url_for('movies_filter_actor', filter1=filter1, p=page - 1) }}">
-    <input type="submit" class="btn btn-secondary btn-sm" value="Previous page"/>
-  </form>
-  {% elif filter_type == "year" %}
-  <form method="POST" action="{{ url_for('movies_filter_year', filter1=filter1, filter2=filter2, p=page - 1) }}">
-    <input type="submit" class="btn btn-secondary btn-sm" value="Previous page"/>
-  </form>
-  {% elif filter_type == "rating" %}
-  <form method="POST" action="{{ url_for('movies_filter_rating', filter1=filter1, filter2=filter2, p=page - 1) }}">
+  {% if page > 0 %}
+  <form method="POST"
+        action="{{ url_for('movies_filter', filter_type=filter_type, filter1=filter1, filter2=filter2, p=page - 1) }}">
     <input type="submit" class="btn btn-secondary btn-sm" value="Previous page"/>
   </form>
   {% endif %}
-{% endif %}
-{% if not last_page %}
-  {% if filter_type == "title" %}
-  <form method="POST" action="{{ url_for('movies_filter_title', filter1=filter1, p=page + 1) }}">
-    <input type="submit" class="btn btn-secondary btn-sm" value="Next page"/>
-  </form>
-  {% elif filter_type == "actor" %}
-  <form method="POST" action="{{ url_for('movies_filter_actor', filter1=filter1, p=page + 1) }}">
-    <input type="submit" class="btn btn-secondary btn-sm" value="Next page"/>
-  </form>
-  {% elif filter_type == "year" %}
-  <form method="POST" action="{{ url_for('movies_filter_year', filter1=filter1, filter2=filter2, p=page + 1) }}">
-    <input type="submit" class="btn btn-secondary btn-sm" value="Next page"/>
-  </form>
-  {% elif filter_type == "rating" %}
-  <form method="POST" action="{{ url_for('movies_filter_rating', filter1=filter1, filter2=filter2, p=page + 1) }}">
+  {% if not last_page %}
+  <form method="POST"
+        action="{{ url_for('movies_filter', filter_type=filter_type, filter1=filter1, filter2=filter2, p=page + 1) }}">
     <input type="submit" class="btn btn-secondary btn-sm" value="Next page"/>
   </form>
   {% endif %}
-{% endif %}
 </div>
 {% if not movies %}
 <p>
