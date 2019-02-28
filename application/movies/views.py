@@ -35,8 +35,8 @@ def movies_index():
         .limit(page_size)\
         .all()
 
-    return render_template("movies/list.html", movies=movies, genres=Genre.query.all(), filter1="", filter2="",
-                           filter_type=filter_type, page=page, last_page=last_page)
+    return render_template("movies/list.html", movies=movies, genres=Genre.query.order_by(Genre.name).all(),
+                           filter1="", filter2="", filter_type=filter_type, page=page, last_page=last_page)
 
 
 @app.route("/movies/top", methods=["GET"])
@@ -191,6 +191,6 @@ def movies_filter(filter_type):
     movie_count = len(all_movies)
     last_page = movie_count <= page_end
 
-    return render_template("movies/list.html", movies=movies, genres=Genre.query.all(), filter1=filter1, filter2=filter2,
-                           filter_type=filter_type, page=page, last_page=last_page)
+    return render_template("movies/list.html", movies=movies, genres=Genre.query.order_by(Genre.name).all(),
+                           filter1=filter1, filter2=filter2, filter_type=filter_type, page=page, last_page=last_page)
 
